@@ -27,6 +27,16 @@ type NotaEnem struct {
 	Media            float64 `json:"media"`
 }
 
+type MediaEnemAgrupadaMunicipio struct {
+	Nome       string  `json:"nome"`
+	MediaGeral float64 `json:"media_geral"`
+	MediaCN    float64 `json:"media_cn"`
+	MediaCH    float64 `json:"media_ch"`
+	MediaLC    float64 `json:"media_lc"`
+	MediaMT    float64 `json:"media_mt"`
+	MediaRed   float64 `json:"media_red"`
+}
+
 type Municipio struct {
 	ID                   uint    `json:"id" gorm:"primaryKey;autoIncrement"`
 	Nome                 string  `json:"nome" gorm:"column:nome"`
@@ -37,4 +47,12 @@ type Municipio struct {
 	ReceitasBrutas       float64 `json:"receitas_brutas"`
 	DespesasBrutas       float64 `json:"despesas_brutas"`
 	PibPerCapita         float64 `json:"pib_per_capita"`
+}
+
+func (NotaEnem) TableName() string {
+	return "notas_enem"
+}
+
+func (MediaEnemAgrupadaMunicipio) TableName() string {
+	return "VIEW_MEDIA_ENEM_AGRUPADA_MUNICIPIO"
 }

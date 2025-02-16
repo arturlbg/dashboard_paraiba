@@ -20,3 +20,15 @@ func GetNotasEnem(c *gin.Context) {
 
 	c.JSON(http.StatusOK, notas)
 }
+
+func GetMediasEnemAgrupadaMunicipio(c *gin.Context) {
+	var medias []models.MediaEnemAgrupadaMunicipio
+	result := db.DB.Find(&medias)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, medias)
+}
