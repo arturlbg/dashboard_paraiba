@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchMunicipios } from '../services/api'
+import { fetchMediasEnemAgrupadaMunicipio, fetchMunicipios } from '../services/api'
 
 interface Filter{
     municipios: {
@@ -27,9 +27,11 @@ export function getFilterData() {
             try{
                 setIsLoadingFilter(true)
                 const municipios = await fetchMunicipios()
+                const medias_enem = await fetchMediasEnemAgrupadaMunicipio()
                 setFilter({
                     municipios: municipios,
-                    anos: anos
+                    anos: anos,
+                    medias_enem: medias_enem
                 })
             } catch (err) {
                 setFilterError('Erro ao buscar dados do dashboard.')

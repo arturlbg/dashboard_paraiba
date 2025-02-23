@@ -16,14 +16,21 @@ export async function fetchMunicipios() {
   }
 }
 
+export async function fetchMediasEnemAgrupadaMunicipio() {
+  try {
+    const response = await api.get('/enem/medias');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar médias enem:', error);
+    throw error;
+  }
+}
+
 export async function fetchDashboardData() {
   return {
     investimentoEducacao: 1200000000, // R$ 1.2B
     idebMedio: 4.8,
     mediaEnemGeral: 580.5,
-    // * As médias por área podem ser manipuladas separadamente no front
-
-    // Dados dos gráficos (todos EXACTAMENTE como no seu código original)
     evolucaoIdeb: {
       series: [
         {

@@ -17,6 +17,18 @@ export const DashboardPage = () => {
   const { filter, isLoadingFilter, filterError} = getFilterData();
   const { dashboard, isLoadingDashboard, dashboardError } = getDashboardData();
   const [selectedMunicipio, setSelectedMunicipio] = useState(null);
+  const [selectedAno, setSelectedAno] = useState(null);
+  const [mediaEnem, setMediaEnem] = useState(null);
+
+  useEffect(() => {
+    if (selectedMunicipio && selectedAno) {
+      setMediaEnem(
+        medias_enem.filter(
+          (media) => media.nome == selectedMunicipio.nome && media.ano == selectedAno
+        )
+      );
+    }
+  }, [selectedMunicipio, selectedAno]);
 
   if (isLoadingDashboard || isLoadingFilter) return <p>Carregando dados...</p>
   if (dashboardError || filterError) return <p>Erro: {dashboardError}</p>
@@ -40,14 +52,15 @@ export const DashboardPage = () => {
   const {
     municipios,
     anos,
+    medias_enem
   } = filter
 
-  console.log(filter)
-  
+  //console.log(medias_enem);
+
   return (
     <div id="webcrumbs">
-      <div className="min-h-screen bg-gray-50">
-        <div className="w-full min-h-screen p-4 sm:p-6">
+      <div className="w-full min-h-screen bg-neutral-50">
+        <div className="w-full min-h-screen p-4 lg:p-6">
           {isLoadingDashboard || isLoadingFilter ? (
             <div className="p-4">Carregando dados...</div>
           ) : dashboardError || filterError ? (
@@ -57,7 +70,7 @@ export const DashboardPage = () => {
           ) : (
             <>
               {/* HEADER */}
-              <header className="absolute top-0 left-0 right-0 bg-white shadow-md z-50 px-4 sm:px-6 py-4">
+              <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 px-4 sm:px-6 py-4">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                   <div className="flex items-center gap-2 sm:gap-4">
                     <img
@@ -65,9 +78,23 @@ export const DashboardPage = () => {
                       alt="Bandeira da Paraíba"
                       className="w-10 h-7 sm:w-12 sm:h-8"
                     />
-                    <h1 className="text-xl sm:text-2xl font-bold">
-                      Dashboard Educacional - Paraíba
-                    </h1>
+                    <div className="flex items-center gap-4">
+                      <h1 className="text-xl sm:text-2xl font-bold">
+                        Dashboard Educacional - Paraíba
+                      </h1>
+                      <div className="flex items-center bg-neutral-100 rounded-full p-1">
+                        <button 
+                          className="px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-primary-500 text-white"
+                        >
+                          Região
+                        </button>
+                        <button 
+                          className="px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-gray-300 text-black"
+                        >
+                          Município
+                        </button>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
                     <Select 
@@ -76,17 +103,16 @@ export const DashboardPage = () => {
                       onChange={setSelectedMunicipio} 
                       labelKey="nome" 
                     />
-                    <select className="w-full sm:w-auto p-2 border rounded-lg hover:border-blue-500 transition-colors">
-                      <option>2023</option>
-                      <option>2022</option>
-                      <option>2021</option>
-                      <option>2020</option>
-                      <option>2019</option>
-                    </select>
+                    <Select
+                      data={anos}
+                      value={selectedAno}
+                      onChange={setSelectedAno}
+                      labelKey="ano"
+                    />
                   </div>
                 </div>
               </header>
-  
+
               {/* INFO DO MUNICÍPIO */}
               <div className="mt-24 mb-6 bg-white rounded-xl shadow p-6">
                 <h2 className="text-lg font-semibold mb-4">Informações do Município</h2>
@@ -174,7 +200,7 @@ export const DashboardPage = () => {
                     analytics
                   </span>
                   <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
-                  <p className="text-2xl font-bold">{mediaEnemGeral}</p>
+                  <p className="text-2xl font-bold">{mediaEnem ? mediaEnem[0].media_geral : 0.00}</p>
                   <div className="flex flex-col gap-2 mt-2">
                     <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors">
                       <span className="material-symbols-outlined text-sm">menu_book</span>
