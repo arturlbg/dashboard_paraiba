@@ -35,6 +35,7 @@ type MediaEnemAgrupadaMunicipio struct {
 	MediaLC    float64 `json:"media_lc"`
 	MediaMT    float64 `json:"media_mt"`
 	MediaRed   float64 `json:"media_red"`
+	Ano        string  `json:"ano"`
 }
 
 type Municipio struct {
@@ -54,5 +55,5 @@ func (NotaEnem) TableName() string {
 }
 
 func (MediaEnemAgrupadaMunicipio) TableName() string {
-	return "VIEW_MEDIA_ENEM_AGRUPADA_MUNICIPIO"
+	return "view_media_enem_agrupada_municipio"
 }

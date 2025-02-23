@@ -23,7 +23,7 @@ func GetNotasEnem(c *gin.Context) {
 
 func GetMediasEnemAgrupadaMunicipio(c *gin.Context) {
 	var medias []models.MediaEnemAgrupadaMunicipio
-	result := db.DB.Find(&medias)
+	result := db.DB.Debug().Find(&medias)
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
