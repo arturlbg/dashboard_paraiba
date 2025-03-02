@@ -195,31 +195,79 @@ export const DashboardPage = () => {
                 </div>
   
                 {/* Média ENEM */}
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1">
-                  <span className="material-symbols-outlined text-purple-500 text-3xl mb-2">
+                <div
+                class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300"
+            >
+                <span
+                    class="material-symbols-outlined text-purple-500 text-3xl mb-2 hover:scale-110 transition-transform duration-300"
+                >
                     analytics
-                  </span>
-                  <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
-                  <p className="text-2xl font-bold">{mediaEnem ? mediaEnem[0].media_geral : 0.00}</p>
-                  <div className="flex flex-col gap-2 mt-2">
-                    <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors">
-                      <span className="material-symbols-outlined text-sm">menu_book</span>
-                      Linguagens
-                    </button>
-                    <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors">
-                      <span className="material-symbols-outlined text-sm">history_edu</span>
-                      Ciências Humanas
-                    </button>
-                    <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors">
-                      <span className="material-symbols-outlined text-sm">science</span>
-                      Ciências da Natureza
-                    </button>
-                    <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors">
-                      <span className="material-symbols-outlined text-sm">functions</span>
-                      Matemática
-                    </button>
-                  </div>
+                </span>
+                <h3 class="text-lg font-semibold mb-2">Média ENEM</h3>
+                <p class="text-2xl font-bold">{mediaEnem ? mediaEnem[0].media_geral : 0.00}</p>
+                <div class="flex flex-col gap-2 mt-2">
+                    <div
+                        class="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300"
+                                >menu_book</span
+                            >
+                            <span>Linguagens</span>
+                        </div>
+                        <span
+                            class="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors"
+                            >{mediaEnem ? mediaEnem[0].media_lc : 0.00}</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300"
+                                >history_edu</span
+                            >
+                            <span>Ciências Humanas</span>
+                        </div>
+                        <span
+                            class="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors"
+                            >{mediaEnem ? mediaEnem[0].media_ch : 0.00}</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300"
+                                >science</span
+                            >
+                            <span>Ciências da Natureza</span>
+                        </div>
+                        <span
+                            class="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors"
+                            >{mediaEnem ? mediaEnem[0].media_cn : 0.00}</span
+                        >
+                    </div>
+                    <div
+                        class="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300"
+                                >functions</span
+                            >
+                            <span>Matemática</span>
+                        </div>
+                        <span
+                            class="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors"
+                            >{mediaEnem ? mediaEnem[0].media_mt : 0.00}</span
+                        >
+                    </div>
                 </div>
+            </div>
               </div>
   
               {/* GRÁFICOS (8 ao todo) */}
