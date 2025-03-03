@@ -50,10 +50,33 @@ type Municipio struct {
 	PibPerCapita         float64 `json:"pib_per_capita"`
 }
 
+type IdebEscolas struct {
+	ID            uint    `json:"id"`
+	IBGEID        int     `json:"ibge_id"`
+	DependenciaID int     `json:"dependencia_id"`
+	CicloID       string  `json:"ciclo_id"`
+	Ano           int     `json:"ano"`
+	Ideb          float64 `json:"ideb"`
+	Fluxo         float64 `json:"fluxo"`
+	Aprendizado   float64 `json:"aprendizado"`
+	NotaMT        float64 `json:"nota_mt"`
+	NotaLP        float64 `json:"nota_lp"`
+	NomeMunicipio string  `json:"nome_municipio"`
+	Dependencia   string  `json:"dependencia"`
+}
+
+func (Municipio) TableName() string {
+	return "view_municipios"
+}
+
 func (NotaEnem) TableName() string {
 	return "notas_enem"
 }
 
 func (MediaEnemAgrupadaMunicipio) TableName() string {
 	return "view_media_enem_agrupada_municipio"
+}
+
+func (IdebEscolas) TableName() string {
+	return "view_indicadores_educacionais"
 }
