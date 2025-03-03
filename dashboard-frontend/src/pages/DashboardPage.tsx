@@ -19,6 +19,7 @@ export const DashboardPage = () => {
   const [selectedMunicipio, setSelectedMunicipio] = useState(null);
   const [selectedAno, setSelectedAno] = useState(null);
   const [mediaEnem, setMediaEnem] = useState(null);
+  const [indicadorIdeb, setIndicadorIdeb] = useState(null);
 
   useEffect(() => {
     if (selectedMunicipio && selectedAno) {
@@ -27,6 +28,11 @@ export const DashboardPage = () => {
           (media) => media.nome == selectedMunicipio.nome && media.ano == selectedAno
         )
       );
+      setIndicadorIdeb(
+        indicadores.filter(
+          (indicador) => indicador.nome_municipio == selectedMunicipio.nome && indicador.ano == selectedAno
+        )
+      );5
     }
   }, [selectedMunicipio, selectedAno]);
 
@@ -52,7 +58,8 @@ export const DashboardPage = () => {
   const {
     municipios,
     anos,
-    medias_enem
+    medias_enem,
+    indicadores
   } = filter
 
   //console.log(medias_enem);
@@ -178,7 +185,7 @@ export const DashboardPage = () => {
                     school
                   </span>
                   <h3 className="text-lg font-semibold mb-2">IDEB Médio</h3>
-                  <p className="text-2xl font-bold">{idebMedio}</p>
+                  <p className="text-2xl font-bold">{indicadorIdeb ? indicadorIdeb[0].ideb : 0.00}</p>
                   <div className="flex items-start gap-2 mt-3 p-3 bg-green-200/50 rounded-lg">
                     <div className="flex flex-col gap-2">
                       <span className="material-symbols-outlined text-green-600 text-xl mt-1 hover:scale-110 transition-transform">

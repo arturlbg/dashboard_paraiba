@@ -26,6 +26,16 @@ export async function fetchMediasEnemAgrupadaMunicipio() {
   }
 }
 
+export async function fetchIndicadoresEducacionais() {
+  try {
+    const response = await api.get('/ideb/indicadores');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar indicadores educacionais:', error);
+    throw error;
+  }
+}
+
 export async function fetchDashboardData() {
   return {
     investimentoEducacao: 1200000000, // R$ 1.2B
