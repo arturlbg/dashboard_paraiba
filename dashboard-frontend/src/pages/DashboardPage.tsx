@@ -49,10 +49,11 @@ export const DashboardPage = () => {
       setIndicadorIdeb(
         filter.indicadores.filter(
           (indicador) => 
-            indicador.nome_municipio === selectedMunicipio.nome && 
-            indicador.ano === idebAno
+            indicador.nome_municipio == selectedMunicipio.nome && 
+            indicador.ano == idebAno
         )
       );
+      console.log(idebAno)
     }
   }, [selectedMunicipio, selectedAno, filter]);
 
@@ -188,25 +189,13 @@ export const DashboardPage = () => {
         <span className="material-symbols-outlined text-green-500 text-3xl mb-3">
           school
         </span>
-        <h3 className="text-lg font-semibold mb-2">IDEB Médio</h3>
-        <p className="text-2xl font-bold mb-4">
-          {indicadorIdeb?.[0]?.ideb || "N/A"}
-        </p>
-        
-        <div className="relative group mb-4">
-          <div className="flex items-center gap-2 p-3 bg-amber-100 rounded-lg border border-amber-300 cursor-help">
-            <span className="material-symbols-outlined text-amber-500 text-xl">
-              warning
+        <div className="mb-9 flex items-center gap-2 mb-4">
+          <h3 className="text-lg font-semibold">Indicadores Educacionais</h3>
+          <div className="relative group">
+            <span className="material-symbols-outlined text-gray-400 text-lg cursor-help mt-2">
+              help
             </span>
-            <p className="text-sm text-amber-700 font-medium">
-              Passe o mouse para mais informações
-            </p>
-          </div>
-          <div className="absolute left-0 right-0 mt-2 p-3 bg-white shadow-lg rounded-lg border border-amber-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
-            <div className="flex items-start gap-2">
-              <span className="material-symbols-outlined text-amber-600 text-xl mt-1">
-                info
-              </span>
+            <div className="absolute left-3 p-3 bg-white shadow-lg rounded-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 w-64">
               <p className="text-sm text-gray-700">
                 Os indicadores educacionais mostram o desempenho da escola de acordo com diferentes
                 métricas oficiais, permitindo compreender os resultados educacionais obtidos.
@@ -222,13 +211,26 @@ export const DashboardPage = () => {
             { label: 'Saeb Matemática', value: indicadorIdeb?.[0]?.nota_saeb_matematica || "N/A", icon: 'functions' },
             { label: 'Saeb Língua Port.', value: indicadorIdeb?.[0]?.nota_saeb_lingua_portuguesa || "N/A", icon: 'menu_book' }
           ].map((item, index) => (
-            <div key={index} className="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-green-200 rounded-full hover:bg-green-300 transition-colors group cursor-pointer">
+            <div key={index} className="mt-3 flex items-center justify-between gap-2 px-3 py-3 text-sm bg-green-200 rounded-full hover:bg-green-300 transition-colors group cursor-pointer">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
                 </span>
                 <span>{item.label}</span>
               </div>
+              {(item.label == 'IDEB' && ["2020", "2022"].includes(selectedAno)) && (
+                <div className="relative group">
+                <span className="ml-97 material-symbols-outlined text-amber-500 text-x1 cursor-help">
+                  warning
+                </span>
+                <div className="absolute left-58 p-3 bg-white shadow-lg rounded-lg border border-amber-200 opacity-1 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                  <p className="text-sm text-gray-700">
+                    O IDEB (Índice de Desenvolvimento da Educação Básica) é calculado a partir das taxas de aprovação
+                    e das médias de desempenho nos exames padronizados do Inep.
+                  </p>
+                </div>
+              </div>
+              )}
               <span className="font-semibold bg-green-50 px-2 py-0.5 rounded-full group-hover:bg-green-400 group-hover:text-white transition-colors">
                 {item.value}
               </span>
@@ -243,16 +245,22 @@ export const DashboardPage = () => {
           analytics
         </span>
         <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
-        <p className="text-2xl font-bold mb-4">{mediaEnem?.[0]?.media_geral || "N/A"}</p>
+        <p className="text-2xl font-bold mb-4">
+          {mediaEnem?.[0]?.media_geral || "N/A"}
+        </p>
 
         <div className="flex flex-col gap-2">
           {[
-            { label: 'Linguagens', value: mediaEnem?.[0]?.media_lc, icon: 'menu_book' },
-            { label: 'Ciências Humanas', value: mediaEnem?.[0]?.media_ch, icon: 'history_edu' },
-            { label: 'Ciências da Natureza', value: mediaEnem?.[0]?.media_cn, icon: 'science' },
-            { label: 'Matemática', value: mediaEnem?.[0]?.media_mt, icon: 'functions' }
+            { label: "Linguagens", value: mediaEnem?.[0]?.media_lc, icon: "menu_book" },
+            { label: "Ciências Humanas", value: mediaEnem?.[0]?.media_ch, icon: "history_edu" },
+            { label: "Ciências da Natureza", value: mediaEnem?.[0]?.media_cn, icon: "science" },
+            { label: "Matemática", value: mediaEnem?.[0]?.media_mt, icon: "functions" },
+            { label: "Redação", value: mediaEnem?.[0]?.media_red, icon: "edit_note" }
           ].map((item, index) => (
-            <div key={index} className="flex items-center justify-between gap-2 px-3 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer">
+            <div
+              key={index}
+              className="mt-1 flex items-center justify-between gap-2 px-2 py-2 text-sm bg-purple-200 rounded-full hover:bg-purple-300 transition-colors group cursor-pointer"
+            >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
@@ -260,7 +268,7 @@ export const DashboardPage = () => {
                 <span>{item.label}</span>
               </div>
               <span className="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors">
-                {item.value?.toFixed(2) || "N/A"}
+                {item.value?.toFixed?.(2) || "N/A"}
               </span>
             </div>
           ))}
