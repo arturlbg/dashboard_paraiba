@@ -206,34 +206,44 @@ export const DashboardPage = () => {
 
         <div className="flex flex-col gap-2">
           {[
-            { label: 'IDEB', value: indicadorIdeb?.[0]?.ideb || "N/A", icon: 'analytics' },
+            { label: 'IDEB', value: indicadorIdeb?.[0]?.ideb || 'N/A', icon: 'analytics' },
             { label: 'Taxa de Aprovação', value: '95%', icon: 'analytics' },
-            { label: 'Saeb Matemática', value: indicadorIdeb?.[0]?.nota_saeb_matematica || "N/A", icon: 'functions' },
-            { label: 'Saeb Língua Port.', value: indicadorIdeb?.[0]?.nota_saeb_lingua_portuguesa || "N/A", icon: 'menu_book' }
+            { label: 'SAEB - Matemática', value: indicadorIdeb?.[0]?.nota_mt || 'N/A', icon: 'functions' },
+            { label: 'SAEB - Língua Portuguesa', value: indicadorIdeb?.[0]?.nota_lp || 'N/A', icon: 'menu_book' },
           ].map((item, index) => (
-            <div key={index} className="mt-3 flex items-center justify-between gap-2 px-3 py-3 text-sm bg-green-200 rounded-full hover:bg-green-300 transition-colors group cursor-pointer">
+            <div
+              key={index}
+              className="mt-3 flex items-center justify-between gap-2 px-3 py-3 text-sm bg-green-200 rounded-full hover:bg-green-300 transition-colors group cursor-pointer"
+            >
+              {/* Ícone e label à esquerda */}
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
                 </span>
                 <span>{item.label}</span>
               </div>
-              {(item.label == 'IDEB' && ["2020", "2022"].includes(selectedAno)) && (
-                <div className="relative group">
-                <span className="ml-97 material-symbols-outlined text-amber-500 text-x1 cursor-help">
-                  warning
+
+              {/* Valor (e warning se necessário) à direita */}
+              <div className="flex items-center gap-2">
+                {['2020', '2022'].includes(selectedAno) && (
+                  <div className="relative group">
+                    <span className="material-symbols-outlined text-amber-500 text-sm cursor-help">
+                      warning
+                    </span>
+                    <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-white shadow-lg rounded-lg border border-amber-200 
+                                    opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
+                      <p className="text-sm text-gray-700">
+                        Essa informação é replicada do ano anterior, visto que só é realizada a cada dois anos.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <span className="font-semibold bg-green-50 px-2 py-0.5 rounded-full 
+                                group-hover:bg-green-400 group-hover:text-white transition-colors">
+                  {item.value}
                 </span>
-                <div className="absolute left-58 p-3 bg-white shadow-lg rounded-lg border border-amber-200 opacity-1 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                  <p className="text-sm text-gray-700">
-                    O IDEB (Índice de Desenvolvimento da Educação Básica) é calculado a partir das taxas de aprovação
-                    e das médias de desempenho nos exames padronizados do Inep.
-                  </p>
-                </div>
               </div>
-              )}
-              <span className="font-semibold bg-green-50 px-2 py-0.5 rounded-full group-hover:bg-green-400 group-hover:text-white transition-colors">
-                {item.value}
-              </span>
             </div>
           ))}
         </div>
