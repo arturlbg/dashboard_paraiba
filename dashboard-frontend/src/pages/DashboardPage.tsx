@@ -89,6 +89,13 @@ export const DashboardPage = () => {
     municipios_despesas
   } = filter;
 
+  const formatCurrency = (value: number): string => {
+    return value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+  };
+
   const renderMunicipioInfo = () => (
     <div className="mt-24 mb-6 bg-white rounded-xl shadow p-6">
       <h2 className="text-lg font-semibold mb-4">Informações do Município</h2>
@@ -179,7 +186,7 @@ export const DashboardPage = () => {
         </span>
         <h3 className="text-lg font-semibold mb-2">Investimento em Educação</h3>
         <p className="text-2xl font-bold mb-4">
-          R$ {municipioDespesa?.[0]?.despesa_total}
+          {formatCurrency(municipioDespesa?.[0]?.despesa_total)}
         </p>
         <div className="flex items-start gap-2 p-3 bg-blue-200/50 rounded-lg">
           <span className="material-symbols-outlined text-blue-600 text-xl mt-1">
@@ -264,7 +271,7 @@ export const DashboardPage = () => {
         </span>
         <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
         <p className="text-2xl font-bold mb-4">
-          {mediaEnem?.[0]?.media_geral || "N/A"}
+          {mediaEnem?.[0]?.media_geral.toFixed(2) || "N/A"}
         </p>
 
         <div className="flex flex-col gap-2">
