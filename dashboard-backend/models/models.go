@@ -1,18 +1,5 @@
 package models
 
-type Despesa struct {
-	Ano           int     `json:"ano"`
-	SiglaUF       string  `json:"sigla_uf"`
-	SiglaUFNome   string  `json:"sigla_uf_nome"`
-	IDMunicipio   int     `json:"id_municipio"`
-	NomeMunicipio string  `json:"id_municipio_nome"`
-	Estagio       string  `json:"estagio"`
-	Conta         string  `json:"conta"`
-	EstagioBD     string  `json:"estagio_bd"`
-	ContaBD       string  `json:"conta_bd"`
-	Valor         float64 `json:"valor"`
-}
-
 type NotaEnem struct {
 	NUInscricao      string  `json:"nu_inscricao"`
 	TPDependenciaADM float64 `json:"tp_dependencia_adm_esc"`
@@ -65,8 +52,20 @@ type IdebEscolas struct {
 	Dependencia   string  `json:"dependencia"`
 }
 
+type Despesa struct {
+	NomeMunicipio   string  `json:"nome_municipio"`
+	CodigoMunicipio string  `json:"codigo_municipio"`
+	Estagio         string  `json:"estagio"`
+	Ano             string  `json:"ano"`
+	DespesaTotal    float64 `json:"despesa_total"`
+}
+
 func (Municipio) TableName() string {
 	return "view_municipios"
+}
+
+func (Despesa) TableName() string {
+	return "view_despesas_municipais_educacao"
 }
 
 func (NotaEnem) TableName() string {
