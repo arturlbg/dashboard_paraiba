@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchIndicadoresEducacionais, fetchMediasEnemAgrupadaMunicipio, fetchMunicipios } from '../services/api'
+import { fetchIndicadoresEducacionais, fetchMediasEnemAgrupadaMunicipio, fetchMunicipios, fetchMunicipiosDespesas } from '../services/api'
 
 interface Filter{
     municipios: {
@@ -28,9 +28,11 @@ export function getFilterData() {
                 setIsLoadingFilter(true)
                 const municipios = await fetchMunicipios()
                 const medias_enem = await fetchMediasEnemAgrupadaMunicipio()
+                const municipios_despesas = await fetchMunicipiosDespesas()
                 const indicadores_educacionais = await fetchIndicadoresEducacionais()
                 setFilter({
                     municipios: municipios,
+                    municipios_despesas: municipios_despesas,
                     anos: anos,
                     medias_enem: medias_enem,
                     indicadores: indicadores_educacionais

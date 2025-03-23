@@ -20,9 +20,10 @@ export const DashboardPage = () => {
   const [selectedAno, setSelectedAno] = useState(null);
   const [mediaEnem, setMediaEnem] = useState(null);
   const [indicadorIdeb, setIndicadorIdeb] = useState(null);
+  const [municipioDespesa, setMunicipioDespesa] = useState(null);
 
   useEffect(() => {
-    if (selectedMunicipio && selectedAno && filter?.medias_enem && filter?.indicadores) {
+    if (selectedMunicipio && selectedAno && filter?.medias_enem && filter?.indicadores && filter?.municipios_despesas) {
       setMediaEnem(
         filter.medias_enem.filter(
           (media) => media.nome === selectedMunicipio.nome && media.ano === selectedAno
@@ -53,7 +54,13 @@ export const DashboardPage = () => {
             indicador.ano == idebAno
         )
       );
-      console.log(idebAno)
+      setMunicipioDespesa(
+        filter.municipios_despesas.filter(
+          (despesa) => 
+            despesa.nome_municipio == selectedMunicipio.nome && 
+            despesa.ano == selectedAno
+        )
+      )
     }
   }, [selectedMunicipio, selectedAno, filter]);
 
@@ -79,6 +86,7 @@ export const DashboardPage = () => {
   const {
     municipios,
     anos,
+    municipios_despesas
   } = filter;
 
   const renderMunicipioInfo = () => (
@@ -171,7 +179,7 @@ export const DashboardPage = () => {
         </span>
         <h3 className="text-lg font-semibold mb-2">Investimento em Educação</h3>
         <p className="text-2xl font-bold mb-4">
-          R$ {(investimentoEducacao / 1_000_000_000).toFixed(1)}B
+          R$ {municipioDespesa?.[0]?.despesa_total}
         </p>
         <div className="flex items-start gap-2 p-3 bg-blue-200/50 rounded-lg">
           <span className="material-symbols-outlined text-blue-600 text-xl mt-1">

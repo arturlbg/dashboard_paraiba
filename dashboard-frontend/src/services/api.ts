@@ -16,6 +16,16 @@ export async function fetchMunicipios() {
   }
 }
 
+export async function fetchMunicipiosDespesas() {
+  try {
+    const response = await api.get('/municipios/despesas');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar despesas dos municípios:', error);
+    throw error;
+  }
+}
+
 export async function fetchMediasEnemAgrupadaMunicipio() {
   try {
     const response = await api.get('/enem/medias');
