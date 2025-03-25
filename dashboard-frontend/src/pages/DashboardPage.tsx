@@ -12,6 +12,26 @@ import { MediaEnemPorAreaChart } from '../components/charts/MediaEnemPorAreaChar
 import { GastosVsPopulacaoChart } from '../components/charts/GastosVsPopulacaoChart';
 import { FaqSection } from '../components/FaqSection';
 import Select from '../components/Select';
+import { InvestimentoEnemChart } from '../components/charts/InvestimentoEnemChart';
+
+interface DashboardData {
+  series: {
+    name: string;
+    data: number[];
+  }[];
+  categories: string[];
+}
+
+function processDashboardData(
+  name: string, 
+  data: number[], 
+  categories: string[]
+): DashboardData {
+  return {
+    series: [{ name, data }],
+    categories
+  };
+}
 
 export const DashboardPage = () => {
   const { filter, isLoadingFilter, filterError } = getFilterData();
@@ -67,6 +87,14 @@ export const DashboardPage = () => {
   if (isLoadingDashboard || isLoadingFilter) return <p>Carregando dados...</p>;
   if (dashboardError || filterError) return <p>Erro: {dashboardError || filterError}</p>;
   if (!dashboard || !filter) return <p>Nenhum dado disponível.</p>;
+
+
+  const dadosExemplo = [
+    { ano: '2019', despesa: 150000, mediaEnem: 480.99 },
+    { ano: '2020', despesa: 180000, mediaEnem: 485.50 },
+    { ano: '2021', despesa: 200000, mediaEnem: 490.75 },
+    { ano: '2022', despesa: 220000, mediaEnem: 495.30 }
+  ]
 
   const {
     investimentoEducacao,
@@ -180,13 +208,15 @@ export const DashboardPage = () => {
   const renderSummaryCards = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6">
       {/* Investimento em Educação */}
-      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 h-full">
+      <div className="min-h-[440px] max-h-[440px] overflow-y-auto bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl transition-all duration-300">
         <span className="material-symbols-outlined text-blue-500 text-3xl mb-3">
           payments
         </span>
         <h3 className="text-lg font-semibold mb-2">Investimento em Educação</h3>
         <p className="text-2xl font-bold mb-4">
-          {formatCurrency(municipioDespesa?.[0]?.despesa_total)}
+        {municipioDespesa?.[0]?.despesa_total
+          ? formatCurrency(municipioDespesa[0].despesa_total)
+          : 'N/A'}
         </p>
         <div className="flex items-start gap-2 p-3 bg-blue-200/50 rounded-lg">
           <span className="material-symbols-outlined text-blue-600 text-xl mt-1">
@@ -200,7 +230,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* IDEB Médio */}
-      <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 h-full">
+      <div className="min-h-[440px] max-h-[440px] bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 ">
         <span className="material-symbols-outlined text-green-500 text-3xl mb-3">
           school
         </span>
@@ -265,7 +295,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* Média ENEM */}
-      <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 h-full">
+      <div className="min-h-[440px] max-h-[440px] bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 ">
         <span className="material-symbols-outlined text-purple-500 text-3xl mb-3">
           analytics
         </span>
@@ -305,10 +335,46 @@ export const DashboardPage = () => {
   const renderCharts = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Evolução do IDEB</h3>
-        <EvolucaoIdebChart
-          series={evolucaoIdeb.series}
-          categories={evolucaoIdeb.categories}
+        <h3 className="text-lg font-semibold mb-4">Média ENEM por Área</h3>
+        <MediaEnemPorAreaChart
+          series={[{
+            name: 'Média Enem',
+            data: mediaEnem ? [
+              mediaEnem?.[0]?.media_cn.toFixed(2), 
+              mediaEnem?.[0]?.media_ch.toFixed(2), 
+              mediaEnem?.[0]?.media_lc.toFixed(2), 
+              mediaEnem?.[0]?.media_mt.toFixed(2), 
+              mediaEnem?.[0]?.media_red.toFixed(2)
+            ] : [0, 0, 0, 0, 0]
+          }]}
+          categories={['Natureza', 'Humanas', 'Linguagens', 'Matematica', 'Redação']}
+        />
+      </div>
+
+      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+        <h3 className="text-lg font-semibold mb-4">Desempenho por Disciplina</h3>
+        <DesempenhoDisciplinaChart
+          series={[{
+            name: 'Média Enem',
+            data: mediaEnem ? [
+              mediaEnem[0]?.media_cn.toFixed(2), 
+              mediaEnem[0]?.media_ch.toFixed(2), 
+              mediaEnem[0]?.media_lc.toFixed(2), 
+              mediaEnem[0]?.media_mt.toFixed(2), 
+              mediaEnem[0]?.media_red.toFixed(2)
+            ] : [0, 0, 0, 0, 0]
+          }]}
+          categories={['Natureza', 'Humanas', 'Linguagens', 'Matematica', 'Redação']}
+        />
+      </div>
+
+      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+        <h3 className="text-lg font-semibold mb-4">Investimento em Educação vs Média ENEM</h3>
+        <InvestimentoEnemChart 
+          mediasEnem={selectedMunicipio ? filter.medias_enem.filter(
+            (media) => media.nome === selectedMunicipio.nome) : []} 
+          despesas={selectedMunicipio ? filter.municipios_despesas.filter(
+            (despesa) => despesa.nome_municipio === selectedMunicipio.nome) : []} 
         />
       </div>
 
@@ -322,14 +388,6 @@ export const DashboardPage = () => {
         <DistribuicaoRecursosChart
           series={distribuicaoRecursos.series}
           labels={distribuicaoRecursos.labels}
-        />
-      </div>
-
-      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Desempenho por Disciplina</h3>
-        <DesempenhoDisciplinaChart
-          series={desempenhoDisciplina.series}
-          categories={desempenhoDisciplina.categories}
         />
       </div>
 
@@ -348,14 +406,6 @@ export const DashboardPage = () => {
         <ComparacaoIdebMunicipiosChart
           series={comparacaoIdeb.series}
           categories={comparacaoIdeb.categories}
-        />
-      </div>
-
-      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Média ENEM por Área</h3>
-        <MediaEnemPorAreaChart
-          series={mediaEnemPorArea.series}
-          categories={mediaEnemPorArea.categories}
         />
       </div>
 
