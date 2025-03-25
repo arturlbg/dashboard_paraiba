@@ -13,6 +13,8 @@ import { GastosVsPopulacaoChart } from '../components/charts/GastosVsPopulacaoCh
 import { FaqSection } from '../components/FaqSection';
 import Select from '../components/Select';
 import { InvestimentoEnemChart } from '../components/charts/InvestimentoEnemChart';
+import { ComparativoMediaChart } from '../components/charts/ComparacaoMediaChart';
+import { calcularMedias } from '../components/tools/Tools';
 
 interface DashboardData {
   series: {
@@ -335,7 +337,7 @@ export const DashboardPage = () => {
   const renderCharts = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Média ENEM por Área</h3>
+        <h3 className="text-lg font-semibold mb-4">Enem - Média por Área</h3>
         <MediaEnemPorAreaChart
           series={[{
             name: 'Média Enem',
@@ -352,7 +354,7 @@ export const DashboardPage = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Desempenho por Disciplina</h3>
+        <h3 className="text-lg font-semibold mb-4">Enem - Desempenho por Disciplina</h3>
         <DesempenhoDisciplinaChart
           series={[{
             name: 'Média Enem',
@@ -379,8 +381,13 @@ export const DashboardPage = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Investimento vs Desempenho</h3>
-        <InvestimentoDesempenhoChart series={investimentoDesempenho.series} />
+        <h3 className="text-lg font-semibold mb-4">Enem - Média do Munícipio vs Média da Paraíba</h3>
+        <ComparativoMediaChart 
+          mediasMunicipio={calcularMedias(selectedMunicipio && selectedAno ? filter.medias_enem.filter(
+            (media) => media.nome === selectedMunicipio.nome && media.ano === selectedAno) : [])} 
+          mediasParaiba={calcularMedias(filter.medias_enem)}
+          chaves={['media_cn', 'media_ch', 'media_lc', 'media_mt', 'media_red']}
+          categoriasX={['Ciências da Natureza', 'Ciências Humanas', 'Linguagens', 'Matemática', 'Redação']} />
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
