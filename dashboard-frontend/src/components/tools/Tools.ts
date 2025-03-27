@@ -1,35 +1,45 @@
-type EnemDados = {
-    nome: string;
-    ano: string;
-    media_geral: number;
-    media_cn: number;
-    media_ch: number;
-    media_lc: number;
-    media_mt: number;
-    media_red: number;
-  };
-  
-export function calcularMedias(dados: EnemDados[]): Record<string, number> {
-    if (dados.length === 0) return {};
-  
-    const soma: Record<string, number> = {};
-    const chaves = Object.keys(dados[0]).filter(
-      (k) => typeof dados[0][k as keyof EnemDados] === "number"
-    );
-  
-    chaves.forEach((k) => (soma[k] = 0));
-  
-    dados.forEach((item) => {
+export function calcularMedias<T extends Record<string, any>>(dados: T[]): Record<string, number> {
+  if (dados.length === 0) return {};
+
+  const chaves = Object.keys(dados[0]).filter(
+      (k) => {
+          const valor = dados[0][k];
+          return (
+              typeof valor === "number" && 
+              k !== "ano" && 
+              k !== "id" && 
+              k !== "ibge_id" && 
+              k !== "dependencia_id"
+          );
+      }
+  );
+
+  if (chaves.length === 0) return {};
+
+  const soma: Record<string, number> = {};
+  chaves.forEach((k) => (soma[k] = 0));
+
+  const contagem: Record<string, number> = {};
+  chaves.forEach((k) => (contagem[k] = 0));
+
+  dados.forEach((item) => {
       chaves.forEach((k) => {
-        soma[k] += item[k as keyof EnemDados] as number;
+          const valor = item[k];
+          if (typeof valor === "number" && valor !== 0) {
+              soma[k] += valor;
+              contagem[k]++;
+          }
       });
-    });
-  
-    const medias: Record<string, number> = {};
-    chaves.forEach((k) => {
-      medias[k] = parseFloat((soma[k] / dados.length).toFixed(2));
-    });
-  
-    return medias;
+  });
+
+  // Calculate averages
+  const medias: Record<string, number> = {};
+  chaves.forEach((k) => {
+      // Only calculate average if we have valid entries
+      medias[k] = contagem[k] > 0 
+          ? parseFloat((soma[k] / contagem[k]).toFixed(2)) 
+          : 0;
+  });
+
+  return medias;
 }
-  

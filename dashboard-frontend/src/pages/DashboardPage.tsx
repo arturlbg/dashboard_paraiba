@@ -391,11 +391,37 @@ export const DashboardPage = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Distribuição de Recursos por Área</h3>
-        <DistribuicaoRecursosChart
-          series={distribuicaoRecursos.series}
-          labels={distribuicaoRecursos.labels}
-        />
+        <h3 className="text-lg font-semibold mb-4">SAEB - Média do Munícipio vs Média da Paraíba</h3>
+        <ComparativoMediaChart 
+          mediasMunicipio={calcularMedias(
+            selectedMunicipio 
+              ? filter.indicadores.filter((indicador) => {
+                  let idebAno = selectedAno;
+                  switch (selectedAno) {
+                    case "2019":
+                    case "2020":
+                      idebAno = "2019";
+                      break;
+                    case "2021":
+                    case "2022":
+                      idebAno = "2021";
+                      break;
+                    case "2023":
+                      idebAno = "2023";
+                      break;
+                    default:
+                      idebAno = selectedAno;
+                  }
+                  return (
+                    indicador.nome_municipio === selectedMunicipio.nome && 
+                    indicador.ano.toString() === idebAno
+                  );
+                }) 
+              : []
+          )} 
+          mediasParaiba={calcularMedias(filter.indicadores)}
+          chaves={['nota_mt', 'nota_lp', 'ideb']}
+          categoriasX={['Matemática', 'Lingua Portuguesa', 'IDEB']} />
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
