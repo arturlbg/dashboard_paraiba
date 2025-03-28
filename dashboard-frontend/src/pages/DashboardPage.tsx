@@ -6,7 +6,7 @@ import { EvolucaoIdebChart } from '../components/charts/EvolucaoIdebChart';
 import { InvestimentoDesempenhoChart } from '../components/charts/InvestimentoDesempenhoChart';
 import { DistribuicaoRecursosChart } from '../components/charts/DistribuicaoRecursosChart';
 import { DesempenhoDisciplinaChart } from '../components/charts/DesempenhoDisciplinaChart';
-import { EvasaoChart } from '../components/charts/EvasaoChart';
+import { EvasaoChart, TaxaAprovacaoChart } from '../components/charts/TaxaAprovacaoChart';
 import { ComparacaoIdebMunicipiosChart } from '../components/charts/ComparacaoIdebMunicipiosChart';
 import { MediaEnemPorAreaChart } from '../components/charts/MediaEnemPorAreaChart';
 import { GastosVsPopulacaoChart } from '../components/charts/GastosVsPopulacaoChart';
@@ -254,7 +254,7 @@ export const DashboardPage = () => {
         <div className="flex flex-col gap-2">
           {[
             { label: 'IDEB', value: indicadorIdeb?.[0]?.ideb || 'N/A', icon: 'analytics' },
-            { label: 'Taxa de Aprovação', value: '95%', icon: 'analytics' },
+            { label: 'Taxa de Aprovação', value: (indicadorIdeb?.[0]?.fluxo * 100) + '%' || 'N/A', icon: 'analytics' },
             { label: 'SAEB - Matemática', value: indicadorIdeb?.[0]?.nota_mt || 'N/A', icon: 'functions' },
             { label: 'SAEB - Língua Portuguesa', value: indicadorIdeb?.[0]?.nota_lp || 'N/A', icon: 'menu_book' },
           ].map((item, index) => (
@@ -371,7 +371,7 @@ export const DashboardPage = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Investimento em Educação vs Média ENEM</h3>
+        <h3 className="text-lg font-semibold mb-4">Enem - Investimento em Educação e Média</h3>
         <InvestimentoEnemChart 
           mediasEnem={selectedMunicipio ? filter.medias_enem.filter(
             (media) => media.nome === selectedMunicipio.nome) : []} 
@@ -425,10 +425,12 @@ export const DashboardPage = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">Evolução da Taxa de Evasão</h3>
-        <EvasaoChart
-          series={evasao.series}
-          categories={evasao.categories}
+        <h3 className="text-lg font-semibold mb-4">Taxa de Aprovação</h3>
+        <TaxaAprovacaoChart
+          data={selectedMunicipio ? filter.indicadores.filter(
+            (indicador) => 
+              indicador.nome_municipio == selectedMunicipio.nome
+          ) : []}
         />
       </div>
 
