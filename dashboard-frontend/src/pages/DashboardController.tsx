@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DashboardMunicipios, MunicipioFilters } from './DashboardMunicipios';
-import { DashboardParaiba } from './DashboardParaiba';
+import { DashboardParaiba, PeriodoFilter } from './DashboardParaiba';
 import LoadingOverlay from '../components/LoadingOverlay';
 import { getFilterData } from '../hooks/getFilterData';
 
@@ -68,7 +68,7 @@ export const DashboardController: React.FC = () => {
         </div>
         
         {/* Adicione os filtros aqui quando a visão for município */}
-        {activeView === 'municipio' && filter && (
+        {activeView === 'municipio' && filter ? (
           <div className="mt-4 sm:mt-0">
             <MunicipioFilters
               filter={filter}
@@ -78,7 +78,13 @@ export const DashboardController: React.FC = () => {
               setSelectedAno={setSelectedAno}
             />
           </div>
-        )}
+        ) : <div className="mt-4 sm:mt-0">
+                <PeriodoFilter
+                  filter={filter}
+                  selectedAno={selectedAno}
+                  setSelectedAno={setSelectedAno}
+                />
+            </div>}
       </div>
     </header>
   );
