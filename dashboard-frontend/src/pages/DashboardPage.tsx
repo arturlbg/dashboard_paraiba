@@ -433,26 +433,6 @@ export const DashboardPage = () => {
           ) : []}
         />
       </div>
-
-      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          Comparação de IDEB entre Municípios
-        </h3>
-        <ComparacaoIdebMunicipiosChart
-          series={comparacaoIdeb.series}
-          categories={comparacaoIdeb.categories}
-        />
-      </div>
-
-      <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-        <h3 className="text-lg font-semibold mb-4">
-          Tendência de Gastos vs População Estudantil
-        </h3>
-        <GastosVsPopulacaoChart
-          series={gastosPopulacao.series}
-          categories={gastosPopulacao.categories}
-        />
-      </div>
     </div>
   );
 
