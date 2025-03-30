@@ -35,15 +35,123 @@ function processDashboardData(
   };
 }
 
-export const DashboardPage = () => {
-  const { filter, isLoadingFilter, filterError } = getFilterData();
-  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardData();
-  const [selectedMunicipio, setSelectedMunicipio] = useState(null);
-  const [selectedAno, setSelectedAno] = useState(null);
-  const [mediaEnem, setMediaEnem] = useState(null);
-  const [indicadorIdeb, setIndicadorIdeb] = useState(null);
-  const [municipioDespesa, setMunicipioDespesa] = useState(null);
+interface Municipio {
+  nome: string;
+  populacao: number;
+  idhm: number;
+  area_territorial: number;
+  [key: string]: any;
+}
 
+interface MediaEnem {
+  nome: string;
+  ano: string;
+  media_geral: number;
+  media_lc: number;
+  media_ch: number;
+  media_cn: number;
+  media_mt: number;
+  media_red: number;
+  [key: string]: any;
+}
+
+interface Indicador {
+  nome_municipio: string;
+  ano: string;
+  ideb: number;
+  fluxo: number;
+  nota_mt: number;
+  nota_lp: number;
+  [key: string]: any;
+}
+
+interface MunicipioDespesa {
+  nome_municipio: string;
+  ano: string;
+  despesa_total: number;
+  [key: string]: any;
+}
+
+interface Ano {
+  ano: string;
+  [key: string]: any;
+}
+
+interface Filter {
+  municipios: Municipio[];
+  anos: Ano[];
+  medias_enem: MediaEnem[];
+  indicadores: Indicador[];
+  municipios_despesas: MunicipioDespesa[];
+  [key: string]: any;
+}
+
+interface Dashboard {
+  faqs: any[];
+  [key: string]: any;
+}
+
+export const MunicipioFilters: React.FC<{
+  filter: Filter | null;
+  selectedMunicipio: Municipio | null;
+  setSelectedMunicipio: (municipio: Municipio) => void;
+  selectedAno: string | null;
+  setSelectedAno: (ano: string) => void;
+}> = ({ filter, selectedMunicipio, setSelectedMunicipio, selectedAno, setSelectedAno }) => {
+  if (!filter) return null;
+  
+  return (
+    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+      <Select 
+        data={filter.municipios} 
+        value={selectedMunicipio} 
+        onChange={(value: Municipio) => setSelectedMunicipio(value)} 
+        labelKey="nome" 
+      />
+      <Select
+        data={[{ ano: "2019" },
+        { ano: "2020" },
+        { ano: "2021" },
+        { ano: "2022" },
+        { ano: "2023" }]}
+        value={selectedAno}
+        onChange={(value: Ano) => setSelectedAno(value.ano)}
+        labelKey="ano"
+      />
+    </div>
+  );
+};
+
+interface DashboardMunicipiosProps {
+  setLoadingState: (isLoading: boolean) => void;
+  selectedMunicipio: Municipio | null;
+  setSelectedMunicipio: (municipio: Municipio) => void;
+  selectedAno: string | null;
+  setSelectedAno: (ano: string) => void;
+}
+
+export const DashboardMunicipios: React.FC<DashboardMunicipiosProps> = ({ 
+  setLoadingState, 
+  selectedMunicipio, 
+  setSelectedMunicipio, 
+  selectedAno, 
+  setSelectedAno 
+}) => {
+  const [mediaEnem, setMediaEnem] = useState<MediaEnem[] | null>(null);
+  const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
+  const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
+
+  // Obter dados usando hooks personalizados
+  const { filter, isLoadingFilter, filterError } = getFilterData<Filter>();
+  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardData<Dashboard>();
+
+  // Efeito para atualizar o estado de loading no componente pai
+  useEffect(() => {
+    const isLoading = isLoadingFilter || isLoadingDashboard;
+    setLoadingState(isLoading);
+  }, [isLoadingFilter, isLoadingDashboard, setLoadingState]);
+
+  // Efeito para processar dados selecionados
   useEffect(() => {
     if (selectedMunicipio && selectedAno && filter?.medias_enem && filter?.indicadores && filter?.municipios_despesas) {
       setMediaEnem(
@@ -52,7 +160,7 @@ export const DashboardPage = () => {
         )
       );
       
-      let idebAno = null;
+      let idebAno: string | null = null;
       switch (selectedAno) {
         case "2019":
         case "2020":
@@ -72,31 +180,28 @@ export const DashboardPage = () => {
       setIndicadorIdeb(
         filter.indicadores.filter(
           (indicador) => 
-            indicador.nome_municipio == selectedMunicipio.nome && 
+            indicador.nome_municipio === selectedMunicipio.nome && 
             indicador.ano == idebAno
         )
       );
+      
       setMunicipioDespesa(
         filter.municipios_despesas.filter(
           (despesa) => 
-            despesa.nome_municipio == selectedMunicipio.nome && 
-            despesa.ano == selectedAno
+            despesa.nome_municipio === selectedMunicipio.nome && 
+            despesa.ano === selectedAno
         )
-      )
+      );
     }
   }, [selectedMunicipio, selectedAno, filter]);
 
-  if (isLoadingDashboard || isLoadingFilter) return <p>Carregando dados...</p>;
-  if (dashboardError || filterError) return <p>Erro: {dashboardError || filterError}</p>;
-  if (!dashboard || !filter) return <p>Nenhum dado disponível.</p>;
-
-
-  const dadosExemplo = [
-    { ano: '2019', despesa: 150000, mediaEnem: 480.99 },
-    { ano: '2020', despesa: 180000, mediaEnem: 485.50 },
-    { ano: '2021', despesa: 200000, mediaEnem: 490.75 },
-    { ano: '2022', despesa: 220000, mediaEnem: 495.30 }
-  ]
+  if (dashboardError || filterError) {
+    return <p className="text-red-500">Erro: {dashboardError || filterError}</p>;
+  }
+  
+  if (!dashboard || !filter) {
+    return <p>Nenhum dado disponível.</p>;
+  }
 
   const {
     investimentoEducacao,
@@ -162,52 +267,7 @@ export const DashboardPage = () => {
     </div>
   );
 
-  const renderHeader = () => (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50 px-4 sm:px-6 py-4">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-        <div className="flex items-center gap-2 sm:gap-4">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Bandeira_da_Para%C3%ADba.svg"
-            alt="Bandeira da Paraíba"
-            className="w-10 h-7 sm:w-12 sm:h-8"
-          />
-          <div className="flex items-center gap-4">
-            <h1 className="text-xl sm:text-2xl font-bold">
-              Dashboard Educacional - Paraíba
-            </h1>
-            <div className="flex items-center bg-neutral-100 rounded-full p-1">
-              <button 
-                className="px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-primary-500 text-white"
-              >
-                Região
-              </button>
-              <button 
-                className="px-4 py-1.5 rounded-full text-sm font-medium transition-all bg-gray-300 text-black"
-              >
-                Município
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
-          <Select 
-            data={municipios} 
-            value={selectedMunicipio} 
-            onChange={setSelectedMunicipio} 
-            labelKey="nome" 
-          />
-          <Select
-            data={anos}
-            value={selectedAno}
-            onChange={setSelectedAno}
-            labelKey="ano"
-          />
-        </div>
-      </div>
-    </header>
-  );
-
-  const renderSummaryCards = () => (
+  const renderSummaryCards = (): JSX.Element => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6">
       {/* Investimento em Educação */}
       <div className="min-h-[440px] max-h-[440px] overflow-y-auto bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl transition-all duration-300">
@@ -334,7 +394,7 @@ export const DashboardPage = () => {
     </div>
   );
 
-  const renderCharts = () => (
+  const renderCharts = (): JSX.Element => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
         <h3 className="text-lg font-semibold mb-4">Enem - Média por Área</h3>
@@ -437,26 +497,11 @@ export const DashboardPage = () => {
   );
 
   return (
-    <div id="webcrumbs">
-      <div className="w-full min-h-screen bg-neutral-50">
-        <div className="w-full min-h-screen p-4 lg:p-6">
-          {isLoadingDashboard || isLoadingFilter ? (
-            <div className="p-4">Carregando dados...</div>
-          ) : dashboardError || filterError ? (
-            <div className="p-4 text-red-500">{filterError || "Erro ao carregar filtros."}</div>
-          ) : !filter || !dashboard ? (
-            <div className="p-4">Nenhum dado disponível.</div>
-          ) : (
-            <>
-              {renderHeader()}
-              {renderMunicipioInfo()}
-              {renderSummaryCards()}
-              {renderCharts()}
-              <FaqSection faqs={faqs} />
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+    <>
+      {renderMunicipioInfo()}
+      {renderSummaryCards()}
+      {renderCharts()}
+      <FaqSection faqs={dashboard.faqs} />
+    </>
   );
 };
