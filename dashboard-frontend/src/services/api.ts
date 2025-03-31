@@ -56,6 +56,16 @@ export async function fetchIndicadoresEducacionaisParaiba() {
   }
 }
 
+export async function fetchDespesasParaiba() {
+  try {
+    const response = await api.get('/estados/despesas');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar despesas da paraíba:', error);
+    throw error;
+  }
+}
+
 export async function fetchDashboardData() {
   return {
     investimentoEducacao: 1200000000, // R$ 1.2B

@@ -31,7 +31,7 @@ interface Indicador {
   nota_lp: number;
 }
 
-interface MunicipioDespesa {
+interface Despesa {
   ano: string;
   despesa_total: number;
 }
@@ -97,7 +97,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   setSelectedAno,
 }) => {
   const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
-  const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
+  const [despesa, setDespesa] = useState<Despesa[] | null>(null);
 
   const { data, isLoadingData, dataError } = getParaibaData<Data>();
   const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
@@ -107,19 +107,22 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   }, [isLoadingData, isLoadingDashboard, setLoadingState]);
 
   useEffect(() => {
-    console.log("inicio", data)
-    if (!selectedAno || !data?.indicadores) return;
+    if (!selectedAno || !data?.indicadores || !data?.despesas) return;
   
     let idebAno = selectedAno;
     if (selectedAno === '2020') idebAno = '2019';
     if (selectedAno === '2022') idebAno = '2021';
   
-    const indicadoresFiltrados = data.indicadores.filter(
+    const indicadorFiltrados = data.indicadores.filter(
       (i) => i.ano == idebAno
     );
+
+    const despesa = data.despesas.filter(
+      (d) => d.ano == idebAno
+    );
   
-    setIndicadorIdeb(indicadoresFiltrados);
-    console.log("aq", indicadorIdeb)
+    setIndicadorIdeb(indicadorFiltrados);
+    setDespesa(despesa);
   }, [selectedAno, data]);
 
   if (dashboardError || dataError) {
@@ -179,8 +182,8 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
         </span>
         <h3 className="text-lg font-semibold mb-2">Investimento em Educação</h3>
         <p className="text-2xl font-bold mb-4">
-          {municipioDespesa?.[0]?.despesa_total
-            ? formatCurrency(municipioDespesa[0].despesa_total)
+          {despesa?.[0]?.despesa_total
+            ? formatCurrency(despesa[0].despesa_total)
             : 'N/A'}
         </p>
         <div className="flex items-start gap-2 p-3 bg-blue-200/50 rounded-lg">
