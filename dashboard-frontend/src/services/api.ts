@@ -38,10 +38,20 @@ export async function fetchMediasEnemAgrupadaMunicipio() {
 
 export async function fetchIndicadoresEducacionais() {
   try {
-    const response = await api.get('/ideb/indicadores');
+    const response = await api.get('/municipios/ideb/indicadores');
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar indicadores educacionais:', error);
+    throw error;
+  }
+}
+
+export async function fetchIndicadoresEducacionaisParaiba() {
+  try {
+    const response = await api.get('/estados/ideb/indicadores');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar indicadores educacionais da paraíba:', error);
     throw error;
   }
 }

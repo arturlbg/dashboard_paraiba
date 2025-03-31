@@ -21,10 +21,8 @@ export const DashboardController: React.FC = () => {
   const handleViewChange = (view: ViewType): void => {
     setIsLoading(true); // Ativar o loading
     setActiveView(view);
-    // O loading será desativado pelo componente de dashboard quando os dados estiverem prontos
   };
   
-  // Função para ser passada aos dashboards para que possam atualizar o estado de loading
   const setLoadingState = (loadingState: boolean): void => {
     setIsLoading(loadingState || isLoadingFilter);
   };
@@ -108,7 +106,10 @@ export const DashboardController: React.FC = () => {
             setSelectedAno={setSelectedAno}
           />
         ) : (
-          <DashboardParaiba setLoadingState={setLoadingState} />
+          <DashboardParaiba 
+          setLoadingState={setLoadingState}
+          selectedAno={selectedAno}
+          setSelectedAno={setSelectedAno} />
         )}
       </div>
     </div>

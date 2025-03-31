@@ -4,6 +4,7 @@ import Select from '../components/Select';
 import { FaqSection } from '../components/FaqSection';
 import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
 import { getDashboardMunicipiosData } from '../hooks/getDashboardMunicipiosData';
+import { getParaibaData } from '../hooks/getParaibaData';
 
 //
 // ──────────────────────────────────────────────────────────────────────────────
@@ -39,10 +40,8 @@ interface Ano {
   ano: string;
 }
 
-interface Filter {
-  medias_enem: MediaEnem[];
-  indicadores: Indicador[];
-  municipios_despesas: MunicipioDespesa[];
+interface Data {
+  indicadores_educacionais: Indicador[];
 }
 
 interface Dashboard {
@@ -97,36 +96,37 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   selectedAno,
   setSelectedAno,
 }) => {
-  const [mediaEnem, setMediaEnem] = useState<MediaEnem[] | null>(null);
   const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
   const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
 
-  const { filter, isLoadingFilter, filterError } = getMunicipiosFilterData<Filter>();
+  const { data, isLoadingData, dataError } = getParaibaData<Data>();
   const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
 
   useEffect(() => {
-    setLoadingState(isLoadingFilter || isLoadingDashboard);
-  }, [isLoadingFilter, isLoadingDashboard, setLoadingState]);
+    setLoadingState(isLoadingData || isLoadingDashboard);
+  }, [isLoadingData, isLoadingDashboard, setLoadingState]);
 
   useEffect(() => {
-    if (!selectedAno || !filter) return;
-
-    setMediaEnem(filter.medias_enem.filter((m) => m.ano == selectedAno));
-
-    let idebAno: string = selectedAno;
+    console.log("inicio", data)
+    if (!selectedAno || !data?.indicadores) return;
+  
+    let idebAno = selectedAno;
     if (selectedAno === '2020') idebAno = '2019';
     if (selectedAno === '2022') idebAno = '2021';
+  
+    const indicadoresFiltrados = data.indicadores.filter(
+      (i) => i.ano == idebAno
+    );
+  
+    setIndicadorIdeb(indicadoresFiltrados);
+    console.log("aq", indicadorIdeb)
+  }, [selectedAno, data]);
 
-    setIndicadorIdeb(filter.indicadores.filter((i) => i.ano == idebAno));
-
-    setMunicipioDespesa(filter.municipios_despesas.filter((d) => d.ano == selectedAno));
-  }, [selectedAno, filter]);
-
-  if (dashboardError || filterError) {
-    return <p className="text-red-500">Erro: {dashboardError || filterError}</p>;
+  if (dashboardError || dataError) {
+    return <p className="text-red-500">Erro: {dashboardError || dataError}</p>;
   }
 
-  if (!dashboard || !filter) {
+  if (!dashboard || !data) {
     return <p>Nenhum dado disponível.</p>;
   }
 
@@ -215,7 +215,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
           {[
             {
               label: 'IDEB',
-              value: indicadorIdeb?.[0]?.ideb ?? 'N/A',
+              value: indicadorIdeb?.[0]?.ideb.toFixed(2) ?? 'N/A',
               icon: 'analytics',
             },
             {
@@ -228,12 +228,12 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
             },
             {
               label: 'SAEB - Matemática',
-              value: indicadorIdeb?.[0]?.nota_mt ?? 'N/A',
+              value: indicadorIdeb?.[0]?.nota_mt.toFixed(2) ?? 'N/A',
               icon: 'functions',
             },
             {
               label: 'SAEB - Língua Portuguesa',
-              value: indicadorIdeb?.[0]?.nota_lp ?? 'N/A',
+              value: indicadorIdeb?.[0]?.nota_lp.toFixed(2) ?? 'N/A',
               icon: 'menu_book',
             },
           ].map((item, index) => (
@@ -273,41 +273,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
         </div>
       </div>
 
-      {/* Média ENEM */}
-      <div className="min-h-[440px] max-h-[440px] bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
-        <span className="material-symbols-outlined text-purple-500 text-3xl mb-3">
-          analytics
-        </span>
-        <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
-        <p className="text-2xl font-bold mb-4">
-          {mediaEnem?.[0]?.media_geral?.toFixed(2) ?? 'N/A'}
-        </p>
-
-        <div className="flex flex-col gap-2">
-          {[
-            { label: 'Linguagens', value: mediaEnem?.[0]?.media_lc, icon: 'menu_book' },
-            { label: 'Ciências Humanas', value: mediaEnem?.[0]?.media_ch, icon: 'history_edu' },
-            { label: 'Ciências da Natureza', value: mediaEnem?.[0]?.media_cn, icon: 'science' },
-            { label: 'Matemática', value: mediaEnem?.[0]?.media_mt, icon: 'functions' },
-            { label: 'Redação', value: mediaEnem?.[0]?.media_red, icon: 'edit_note' },
-          ].map((item, index) => (
-            <div
-              key={index}
-              className="mt-1 flex items-center justify-between gap-2 px-2 py-2 text-sm bg-purple-200 rounded-full transition-colors group"
-            >
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform duration-300">
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </div>
-              <span className="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors">
-                {item.value !== undefined ? item.value.toFixed(2) : 'N/A'}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+     
     </div>
   );
 
