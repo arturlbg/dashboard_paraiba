@@ -12,7 +12,7 @@ import (
 func GetEstadoDespesas(c *gin.Context) {
 	var despesas []models.Despesa
 	result := db.DB.
-		Table("despesa").
+		Model(&models.Despesa{}).
 		Select(`
 			ano,
 			SUM(despesa_total) as despesa_total
