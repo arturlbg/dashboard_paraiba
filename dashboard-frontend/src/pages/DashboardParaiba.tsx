@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import '../style.css';
 import Select from '../components/Select';
 import { FaqSection } from '../components/FaqSection';
-import { getFilterData } from '../hooks/getFilterData';
-import { getDashboardData } from '../hooks/getDashboardData';
+import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
+import { getDashboardMunicipiosData } from '../hooks/getDashboardMunicipiosData';
 
 //
 // ──────────────────────────────────────────────────────────────────────────────
-//   >>> Tipos (somente os necessários) <<<
+//   >>> Tipos <<<
 // ──────────────────────────────────────────────────────────────────────────────
 //
 
@@ -86,12 +86,6 @@ export const PeriodoFilter: React.FC<PeriodoFilterProps> = ({
   );
 };
 
-//
-// ──────────────────────────────────────────────────────────────────────────────
-//   >>> Dashboard Paraíba (Componente) <<<
-// ──────────────────────────────────────────────────────────────────────────────
-//
-
 interface DashboardParaibaProps {
   setLoadingState: (isLoading: boolean) => void;
   selectedAno: string | null;
@@ -107,45 +101,31 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
   const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
 
-  const { filter, isLoadingFilter, filterError } = getFilterData<Filter>();
-  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardData<Dashboard>();
+  const { filter, isLoadingFilter, filterError } = getMunicipiosFilterData<Filter>();
+  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
 
-  //
-  // Controla estado de "loading" baseado nas requisições simultâneas
-  //
   useEffect(() => {
     setLoadingState(isLoadingFilter || isLoadingDashboard);
   }, [isLoadingFilter, isLoadingDashboard, setLoadingState]);
 
-  //
-  // Filtra dados conforme o ano selecionado
-  //
   useEffect(() => {
     if (!selectedAno || !filter) return;
 
-    // Filtrar médias do ENEM
     setMediaEnem(filter.medias_enem.filter((m) => m.ano == selectedAno));
 
-    // Definir o ano do IDEB (exemplo de regra de anos)
     let idebAno: string = selectedAno;
     if (selectedAno === '2020') idebAno = '2019';
     if (selectedAno === '2022') idebAno = '2021';
 
-    // Filtrar indicadores IDEB
     setIndicadorIdeb(filter.indicadores.filter((i) => i.ano == idebAno));
 
-    // Filtrar despesas
     setMunicipioDespesa(filter.municipios_despesas.filter((d) => d.ano == selectedAno));
   }, [selectedAno, filter]);
 
-  //
-  // Se houve algum erro na requisição
-  //
   if (dashboardError || filterError) {
     return <p className="text-red-500">Erro: {dashboardError || filterError}</p>;
   }
 
-  // Se ainda não chegou nada do backend
   if (!dashboard || !filter) {
     return <p>Nenhum dado disponível.</p>;
   }
@@ -159,9 +139,6 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   const formatCurrency = (value: number): string =>
     value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-  //
-  // Renderiza informações gerais da Paraíba
-  //
   const renderEstadoInfo = () => (
     <div className="mt-24 mb-6 bg-white rounded-xl shadow p-6">
       <h2 className="text-lg font-semibold mb-4">Informações da Paraíba</h2>
@@ -169,19 +146,19 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
         <div className="p-4 bg-gray-50 rounded-lg">
           <span className="material-symbols-outlined text-blue-500">location_city</span>
           <p className="text-sm mt-2">População</p>
-          <p className="text-lg font-semibold">{99999} habitantes</p>
+          <p className="text-lg font-semibold">{"3.974.687"} habitantes</p>
         </div>
 
         <div className="p-4 bg-gray-50 rounded-lg">
           <span className="material-symbols-outlined text-green-500">trending_up</span>
           <p className="text-sm mt-2">IDH</p>
-          <p className="text-lg font-semibold">{999}</p>
+          <p className="text-lg font-semibold">{"0.698"}</p>
         </div>
 
         <div className="p-4 bg-gray-50 rounded-lg">
           <span className="material-symbols-outlined text-purple-500">straighten</span>
           <p className="text-sm mt-2">Área Total</p>
-          <p className="text-lg font-semibold">{999} km²</p>
+          <p className="text-lg font-semibold">{"56.467,242"} km²</p>
         </div>
 
         <div className="p-4 bg-gray-50 rounded-lg">
@@ -193,9 +170,6 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
     </div>
   );
 
-  //
-  // Renderiza cards com informações de investimento, IDEB e médias do ENEM
-  //
   const renderSummaryCards = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6">
       {/* Investimento em Educação */}

@@ -16,7 +16,7 @@ interface Filter{
     anos: string
 }
 
-export function getFilterData() {
+export function getMunicipiosFilterData() {
     const [filter, setFilter] = useState<Filter | null>(null)
     const [isLoadingFilter, setIsLoadingFilter] = useState(true)
     const [filterError, setFilterError] = useState<string | null>(null)

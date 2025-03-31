@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getDashboardData } from '../hooks/getDashboardData';
-import { getFilterData } from '../hooks/getFilterData';
+import { getDashboardMunicipiosData } from '../hooks/getDashboardMunicipiosData';
+import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
 import '../style.css';
 import { MediaEnemPorAreaChart } from '../components/charts/MediaEnemPorAreaChart';
 import { DesempenhoDisciplinaChart } from '../components/charts/DesempenhoDisciplinaChart';
@@ -139,8 +139,8 @@ export const DashboardMunicipios: React.FC<DashboardMunicipiosProps> = ({
   const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
 
   // Hooks personalizados para obter dados
-  const { filter, isLoadingFilter, filterError } = getFilterData<Filter>();
-  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardData<Dashboard>();
+  const { filter, isLoadingFilter, filterError } = getMunicipiosFilterData<Filter>();
+  const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
 
   //
   // Controla estado "loading" no componente pai

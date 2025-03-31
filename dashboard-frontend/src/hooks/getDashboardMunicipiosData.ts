@@ -19,7 +19,7 @@ interface DashboardData {
   }>
 }
 
-export function getDashboardData() {
+export function getDashboardMunicipiosData() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(true)
   const [dashboardError, setDashboardError] = useState<string | null>(null)

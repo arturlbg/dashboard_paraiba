@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DashboardMunicipios, MunicipioFilters } from './DashboardMunicipios';
 import { DashboardParaiba, PeriodoFilter } from './DashboardParaiba';
 import LoadingOverlay from '../components/LoadingOverlay';
-import { getFilterData } from '../hooks/getFilterData';
+import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
 
 type ViewType = 'municipio' | 'paraiba';
 
@@ -15,7 +15,7 @@ export const DashboardController: React.FC = () => {
   const [selectedAno, setSelectedAno] = useState(null);
   
   // Obter dados do filtro
-  const { filter, isLoadingFilter } = getFilterData();
+  const { filter, isLoadingFilter } = getMunicipiosFilterData();
   
   // Função para lidar com a mudança de visão
   const handleViewChange = (view: ViewType): void => {
