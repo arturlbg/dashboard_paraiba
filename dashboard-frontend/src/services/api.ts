@@ -66,6 +66,16 @@ export async function fetchDespesasParaiba() {
   }
 }
 
+export async function fetchMediasEnemParaiba() {
+  try {
+    const response = await api.get('/enem/medias/estados');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar médias do enem da Paraíba:', error);
+    throw error;
+  }
+}
+
 export async function fetchDashboardData() {
   return {
     investimentoEducacao: 1200000000, // R$ 1.2B

@@ -10,14 +10,11 @@ export const DashboardController: React.FC = () => {
   const [activeView, setActiveView] = useState<ViewType>('municipio');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
-  // Estados para os filtros de município
   const [selectedMunicipio, setSelectedMunicipio] = useState(null);
   const [selectedAno, setSelectedAno] = useState(null);
   
-  // Obter dados do filtro
   const { filter, isLoadingFilter } = getMunicipiosFilterData();
   
-  // Função para lidar com a mudança de visão
   const handleViewChange = (view: ViewType): void => {
     setIsLoading(true); // Ativar o loading
     setActiveView(view);
@@ -42,20 +39,20 @@ export const DashboardController: React.FC = () => {
             </h1>
             <div className="flex items-center bg-neutral-100 rounded-full p-1">
               <button 
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeView === 'paraiba' 
-                    ? 'bg-primary-500 text-white' 
-                    : 'bg-gray-300 text-black'
+                    ? 'bg-gray-300 text-black'
+                    : 'bg-primary-500 text-white' 
                 }`}
                 onClick={() => handleViewChange('paraiba')}
               >
                 Paraíba
               </button>
               <button 
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeView === 'municipio' 
-                    ? 'bg-primary-500 text-white' 
-                    : 'bg-gray-300 text-black'
+                    ? 'bg-gray-300 text-black'
+                    : 'bg-primary-500 text-white' 
                 }`}
                 onClick={() => handleViewChange('municipio')}
               >

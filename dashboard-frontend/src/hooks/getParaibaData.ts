@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { fetchDespesasParaiba, fetchIndicadoresEducacionaisParaiba } from "../services/api"
+import { fetchDespesasParaiba, fetchIndicadoresEducacionaisParaiba, fetchMediasEnemParaiba } from "../services/api"
 
 export function getParaibaData() {
     const [data, setdata] = useState<data | null>(null)
@@ -12,10 +12,11 @@ export function getParaibaData() {
                 setIsLoadingData(true)
                 const indicadores = await fetchIndicadoresEducacionaisParaiba()
                 const despesas = await fetchDespesasParaiba()
-                const medias_enem = [];
+                const medias_enem = await fetchMediasEnemParaiba();
                 setdata({
                     indicadores: indicadores,
-                    despesas: despesas
+                    despesas: despesas,
+                    medias_enem: medias_enem
                 })
             } catch (err) {
                 setDataError('Erro ao buscar dados do dashboard da Paraíba.')

@@ -13,7 +13,6 @@ import { getParaibaData } from '../hooks/getParaibaData';
 //
 
 interface MediaEnem {
-  nome: string;
   ano: string;
   media_geral: number;
   media_lc: number;
@@ -98,6 +97,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
 }) => {
   const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
   const [despesa, setDespesa] = useState<Despesa[] | null>(null);
+  const [mediaEnem, setMediaEnem] = useState<MediaEnem[] | null>(null);
 
   const { data, isLoadingData, dataError } = getParaibaData<Data>();
   const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
@@ -107,7 +107,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   }, [isLoadingData, isLoadingDashboard, setLoadingState]);
 
   useEffect(() => {
-    if (!selectedAno || !data?.indicadores || !data?.despesas) return;
+    if (!selectedAno || !data?.indicadores || !data?.despesas || !data?.medias_enem) return;
   
     let idebAno = selectedAno;
     if (selectedAno === '2020') idebAno = '2019';
@@ -118,11 +118,16 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
     );
 
     const despesa = data.despesas.filter(
-      (d) => d.ano == idebAno
+      (d) => d.ano == selectedAno
     );
+
+    const media_enem = data.medias_enem.filter(
+      (e) => e.ano == selectedAno
+    )
   
     setIndicadorIdeb(indicadorFiltrados);
     setDespesa(despesa);
+    setMediaEnem(media_enem)
   }, [selectedAno, data]);
 
   if (dashboardError || dataError) {
@@ -276,6 +281,40 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
         </div>
       </div>
 
+      <div className="min-h-[440px] max-h-[440px] bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
+        <span className="material-symbols-outlined text-purple-500 text-3xl mb-3">
+          analytics
+        </span>
+        <h3 className="text-lg font-semibold mb-2">Média ENEM</h3>
+        <p className="text-2xl font-bold mb-4">
+          {mediaEnem?.[0]?.media_geral?.toFixed(2) ?? 'N/A'}
+        </p>
+
+        <div className="flex flex-col gap-2">
+          {[
+            { label: 'Linguagens', value: mediaEnem?.[0]?.media_lc, icon: 'menu_book' },
+            { label: 'Ciências Humanas', value: mediaEnem?.[0]?.media_ch, icon: 'history_edu' },
+            { label: 'Ciências da Natureza', value: mediaEnem?.[0]?.media_cn, icon: 'science' },
+            { label: 'Matemática', value: mediaEnem?.[0]?.media_mt, icon: 'functions' },
+            { label: 'Redação', value: mediaEnem?.[0]?.media_red, icon: 'edit_note' },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="mt-1 flex items-center justify-between gap-2 px-2 py-2 text-sm bg-purple-200 rounded-full group transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-sm group-hover:scale-110 transition-transform">
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
+              </div>
+              <span className="font-semibold bg-purple-50 px-2 py-0.5 rounded-full group-hover:bg-purple-400 group-hover:text-white transition-colors">
+                {item.value !== undefined ? item.value.toFixed(2) : 'N/A'}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
      
     </div>
   );
