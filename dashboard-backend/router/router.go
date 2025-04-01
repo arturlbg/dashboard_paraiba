@@ -20,6 +20,7 @@ func StartRouter() {
 	router.GET("/municipios/ideb/indicadores", controller.GetIndicadoresEducacionais)
 	router.GET("/estados/ideb/indicadores", controller.GetIndicadorEducacionalParaiba)
 	router.GET("/estados/despesas", controller.GetEstadoDespesas)
+	router.GET("/enem/medias/estados", controller.GetMediasEnemParaiba)
 
 	router.Run("localhost:8080")
 }
