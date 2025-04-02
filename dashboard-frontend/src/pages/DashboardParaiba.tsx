@@ -5,6 +5,10 @@ import { FaqSection } from '../components/FaqSection';
 import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
 import { getDashboardMunicipiosData } from '../hooks/getDashboardMunicipiosData';
 import { getParaibaData } from '../hooks/getParaibaData';
+import { InvestimentoEducacaoChart } from '../components/charts/paraibaCharts/InvestimentoEducacaoChart';
+import { TopMunicipiosInvestimentoChart } from '../components/charts/paraibaCharts/TopMunicipiosInvestimentoChart';
+import { IdebChart } from '../components/charts/paraibaCharts/IdebChart';
+import { TopMunicipiosMediaIdebChart } from '../components/charts/paraibaCharts/TopMunicipiosMediaIdebChart';
 
 //
 // ──────────────────────────────────────────────────────────────────────────────
@@ -107,7 +111,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
   }, [isLoadingData, isLoadingDashboard, setLoadingState]);
 
   useEffect(() => {
-    if (!selectedAno || !data?.indicadores || !data?.despesas || !data?.medias_enem) return;
+    if (!selectedAno || !data?.indicadores || !data?.despesas_paraiba || !data?.medias_enem) return;
   
     let idebAno = selectedAno;
     if (selectedAno === '2020') idebAno = '2019';
@@ -117,7 +121,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
       (i) => i.ano == idebAno
     );
 
-    const despesa = data.despesas.filter(
+    const despesa = data.despesas_paraiba.filter(
       (d) => d.ano == selectedAno
     );
 
@@ -319,6 +323,51 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
     </div>
   );
 
+  const renderCharts = () => (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">Evolução do Investimento em Educação</h3>
+          <InvestimentoEducacaoChart dados={data?.despesas_paraiba}></InvestimentoEducacaoChart>
+        </div>
+  
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">Os 10 munícipios com maior investimento em Educação</h3>
+          <TopMunicipiosInvestimentoChart dados={data?.despesas_municipios}></TopMunicipiosInvestimentoChart>
+         
+        </div>
+  
+        {/* Enem - Investimento e Média */}
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">
+             Evolução do IDEB ao Longo dos Anos
+          </h3>
+          <IdebChart dados={data?.indicadores}></IdebChart>
+        </div>
+  
+        {/* Enem - Município vs Paraíba */}
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">
+             Os 10 municípios com maior nota no IDEB
+          </h3>
+          <TopMunicipiosMediaIdebChart dados={data?.indicadores_municipios}></TopMunicipiosMediaIdebChart>
+        </div>
+  
+        {/* SAEB - Município vs Paraíba */}
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">
+            SAEB - Média do Município vs Média da Paraíba
+          </h3>
+          
+        </div>
+  
+        {/* Taxa de Aprovação */}
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">Taxa de Aprovação</h3>
+          
+        </div>
+      </div>
+    );
+
   //
   // Render final do componente
   //
@@ -326,6 +375,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
     <>
       {renderEstadoInfo()}
       {renderSummaryCards()}
+      {renderCharts()}
       <FaqSection faqs={dashboard.faqs} />
     </>
   );

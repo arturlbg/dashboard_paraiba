@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { getDashboardMunicipiosData } from '../hooks/getDashboardMunicipiosData';
 import { getMunicipiosFilterData } from '../hooks/getMunicipiosFilterData';
 import '../style.css';
-import { MediaEnemPorAreaChart } from '../components/charts/MediaEnemPorAreaChart';
-import { DesempenhoDisciplinaChart } from '../components/charts/DesempenhoDisciplinaChart';
-import { InvestimentoEnemChart } from '../components/charts/InvestimentoEnemChart';
-import { ComparativoMediaChart } from '../components/charts/ComparacaoMediaChart';
-import { TaxaAprovacaoChart } from '../components/charts/TaxaAprovacaoChart';
+import { MediaEnemPorAreaChart } from '../components/charts/municipiosCharts/MediaEnemPorAreaChart';
+import { DesempenhoDisciplinaChart } from '../components/charts/municipiosCharts/DesempenhoDisciplinaChart';
+import { InvestimentoEnemChart } from '../components/charts/municipiosCharts/InvestimentoEnemChart';
+import { ComparativoMediaChart } from '../components/charts/municipiosCharts/ComparacaoMediaChart';
+import { TaxaAprovacaoChart } from '../components/charts/municipiosCharts/TaxaAprovacaoChart';
 import { FaqSection } from '../components/FaqSection';
 import Select from '../components/Select';
 import { calcularMedias } from '../components/tools/Tools';
@@ -138,20 +138,13 @@ export const DashboardMunicipios: React.FC<DashboardMunicipiosProps> = ({
   const [indicadorIdeb, setIndicadorIdeb] = useState<Indicador[] | null>(null);
   const [municipioDespesa, setMunicipioDespesa] = useState<MunicipioDespesa[] | null>(null);
 
-  // Hooks personalizados para obter dados
   const { filter, isLoadingFilter, filterError } = getMunicipiosFilterData<Filter>();
   const { dashboard, isLoadingDashboard, dashboardError } = getDashboardMunicipiosData<Dashboard>();
 
-  //
-  // Controla estado "loading" no componente pai
-  //
   useEffect(() => {
     setLoadingState(isLoadingFilter || isLoadingDashboard);
   }, [isLoadingFilter, isLoadingDashboard, setLoadingState]);
 
-  //
-  // Processa dados do município selecionado e ano selecionado
-  //
   useEffect(() => {
     if (
       !selectedMunicipio ||
@@ -169,7 +162,6 @@ export const DashboardMunicipios: React.FC<DashboardMunicipiosProps> = ({
     );
     setMediaEnem(filteredEnem);
 
-    // Define qual ano de IDEB mostrar (exemplo de lógica)
     let idebAno = selectedAno;
     if (['2019', '2020'].includes(selectedAno)) {
       idebAno = '2019';
