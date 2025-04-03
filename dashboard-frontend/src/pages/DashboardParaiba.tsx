@@ -356,8 +356,8 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
 
                 {data?.despesas_municipios ? (
                     <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 Investimento Mun. ({selectedAno})</h3>
-                        <TopMunicipiosInvestimentoChart dados={data.despesas_municipios} selectedYear={selectedAno} />
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 Investimento Municipais</h3>
+                        <TopMunicipiosInvestimentoChart dados={data.despesas_municipios} />
                     </div>
                  ) : <div className="bg-gray-100 rounded-xl p-6 min-h-[300px] flex items-center justify-center"><p className="text-gray-400">Dados indisponíveis</p></div>}
 
@@ -371,8 +371,8 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
                  {data?.indicadores_municipios ? (
                     <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
                          {/* Ajuste no título para refletir o ano do IDEB */}
-                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 IDEB Mun. ({['2020', '2022', '2024'].includes(selectedAno || '') ? parseInt(selectedAno || '0') - 1 : selectedAno})</h3>
-                        <TopMunicipiosMediaIdebChart dados={data.indicadores_municipios} selectedYear={selectedAno} />
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 IDEB Municipal</h3>
+                        <TopMunicipiosMediaIdebChart dados={data.indicadores_municipios} />
                     </div>
                  ) : <div className="bg-gray-100 rounded-xl p-6 min-h-[300px] flex items-center justify-center"><p className="text-gray-400">Dados indisponíveis</p></div>}
 
@@ -385,8 +385,8 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
 
                  {data?.medias_enem_municipios ? (
                     <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 Média ENEM Mun. ({selectedAno})</h3>
-                        <TopMunicipiosMediaEnemChart dados={data.medias_enem_municipios} selectedYear={selectedAno}/>
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">Top 10 Média ENEM Municipal</h3>
+                        <TopMunicipiosMediaEnemChart dados={data.medias_enem_municipios}/>
                     </div>
                   ) : <div className="bg-gray-100 rounded-xl p-6 min-h-[300px] flex items-center justify-center"><p className="text-gray-400">Dados indisponíveis</p></div>}
             </div>

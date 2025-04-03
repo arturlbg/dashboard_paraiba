@@ -102,10 +102,6 @@ export const TopMunicipiosMediaEnemChart: React.FC<TopMunicipiosMediaEnemChartPr
         },
       },
     },
-    title: {
-      text: 'Top 10 Municípios com Maior Média Geral no ENEM (Média Anual)',
-      align: 'left',
-    },
   };
 
   return <Chart options={options} series={series} type="bar" height={400} />;
