@@ -9,6 +9,9 @@ import { InvestimentoEducacaoChart } from '../components/charts/paraibaCharts/In
 import { TopMunicipiosInvestimentoChart } from '../components/charts/paraibaCharts/TopMunicipiosInvestimentoChart';
 import { IdebChart } from '../components/charts/paraibaCharts/IdebChart';
 import { TopMunicipiosMediaIdebChart } from '../components/charts/paraibaCharts/TopMunicipiosMediaIdebChart';
+import { TopMunicipiosMediaEnemChart } from '../components/charts/paraibaCharts/TopMunicipiosMediaEnemChart';
+import { EvolucaoMediaGeralEnemChart } from '../components/charts/paraibaCharts/EvolucaoMediaGeralEnemChart';
+import TopMunicipiosIdebChart from '../components/charts/paraibaCharts/TopMunicipiosIdebChart';
 
 //
 // ──────────────────────────────────────────────────────────────────────────────
@@ -117,7 +120,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
     if (selectedAno === '2020') idebAno = '2019';
     if (selectedAno === '2022') idebAno = '2021';
   
-    const indicadorFiltrados = data.indicadores.filter(
+    const indicadorFiltrados = data.indicadores_paraiba.filter(
       (i) => i.ano == idebAno
     );
 
@@ -125,7 +128,7 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
       (d) => d.ano == selectedAno
     );
 
-    const media_enem = data.medias_enem.filter(
+    const media_enem = data.medias_enem_paraiba.filter(
       (e) => e.ano == selectedAno
     )
   
@@ -336,15 +339,13 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
          
         </div>
   
-        {/* Enem - Investimento e Média */}
         <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
           <h3 className="text-lg font-semibold mb-4">
              Evolução do IDEB ao Longo dos Anos
           </h3>
-          <IdebChart dados={data?.indicadores}></IdebChart>
+          <IdebChart dados={data?.indicadores_paraiba}></IdebChart>
         </div>
   
-        {/* Enem - Município vs Paraíba */}
         <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
           <h3 className="text-lg font-semibold mb-4">
              Os 10 municípios com maior nota no IDEB
@@ -352,18 +353,43 @@ export const DashboardParaiba: React.FC<DashboardParaibaProps> = ({
           <TopMunicipiosMediaIdebChart dados={data?.indicadores_municipios}></TopMunicipiosMediaIdebChart>
         </div>
   
-        {/* SAEB - Município vs Paraíba */}
         <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
           <h3 className="text-lg font-semibold mb-4">
-            SAEB - Média do Município vs Média da Paraíba
+            Evolução da nota do ENEM ao longos dos Anos
           </h3>
+          <EvolucaoMediaGeralEnemChart dados={data?.medias_enem_paraiba}></EvolucaoMediaGeralEnemChart>
           
         </div>
   
-        {/* Taxa de Aprovação */}
         <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
-          <h3 className="text-lg font-semibold mb-4">Taxa de Aprovação</h3>
-          
+          <h3 className="text-lg font-semibold mb-4">Os 10 munícipios com maior nota no ENEM</h3>
+          <TopMunicipiosMediaEnemChart dados={data?.medias_enem_municipios}></TopMunicipiosMediaEnemChart>
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">yeadead</h3>
+          <TopMunicipiosIdebChart 
+            dadosDespesa = {[
+              { nome_municipio: 'João Pessoa', ano: '2021', despesa_total: 100000000 },
+              { nome_municipio: 'João Pessoa', ano: '2022', despesa_total: 120000000 },
+              { nome_municipio: 'Campina Grande', ano: '2021', despesa_total: 50000000 },
+              { nome_municipio: 'Campina Grande', ano: '2022', despesa_total: 60000000 },
+              { nome_municipio: 'Patos', ano: '2021', despesa_total: 20000000 },
+              { nome_municipio: 'Patos', ano: '2022', despesa_total: 25000000 },
+            ]}
+            dadosIdeb = {[
+              { nome_municipio: 'João Pessoa', ano: 2021, nota_mt: 280, nota_lp: 290 },
+              { nome_municipio: 'João Pessoa', ano: 2022, nota_mt: 285, nota_lp: 295 },
+              { nome_municipio: 'Campina Grande', ano: 2021, nota_mt: 260, nota_lp: 270 },
+              { nome_municipio: 'Campina Grande', ano: 2022, nota_mt: 265, nota_lp: 275 },
+              { nome_municipio: 'Patos', ano: 2021, nota_mt: 240, nota_lp: 250 },
+              { nome_municipio: 'Patos', ano: 2022, nota_mt: 245, nota_lp: 255 },
+            ]}>
+          </TopMunicipiosIdebChart>
+        </div>
+
+        <div className="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow">
+          <h3 className="text-lg font-semibold mb-4">teataetada</h3>
         </div>
       </div>
     );

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { fetchDespesasParaiba, fetchIndicadoresEducacionais, fetchIndicadoresEducacionaisParaiba, fetchMediasEnemParaiba, fetchMunicipiosDespesas } from "../services/api"
+import { fetchDespesasParaiba, fetchIndicadoresEducacionais, fetchIndicadoresEducacionaisParaiba, fetchMediasEnemAgrupadaMunicipio, fetchMediasEnemParaiba, fetchMunicipiosDespesas } from "../services/api"
 
 export function getParaibaData() {
     const [data, setdata] = useState<data | null>(null)
@@ -10,17 +10,19 @@ export function getParaibaData() {
         async function loadData() {
             try{
                 setIsLoadingData(true)
-                const indicadores = await fetchIndicadoresEducacionaisParaiba();
-                const despesas_paraiba = await fetchDespesasParaiba();
-                const medias_enem = await fetchMediasEnemParaiba();
-                const despesas_municipios = await fetchMunicipiosDespesas();
+                const indicadores_paraiba = await fetchIndicadoresEducacionaisParaiba();
                 const indicadores_municipios = await fetchIndicadoresEducacionais();
+                const despesas_paraiba = await fetchDespesasParaiba();
+                const despesas_municipios = await fetchMunicipiosDespesas();
+                const medias_enem_paraiba = await fetchMediasEnemParaiba();
+                const medias_enem_municipios = await fetchMediasEnemAgrupadaMunicipio();
                 setdata({
-                    indicadores: indicadores,
+                    indicadores_paraiba: indicadores_paraiba,
+                    indicadores_municipios: indicadores_municipios,
                     despesas_paraiba: despesas_paraiba,
                     despesas_municipios: despesas_municipios,
-                    medias_enem: medias_enem,
-                    indicadores_municipios: indicadores_municipios
+                    medias_enem_paraiba: medias_enem_paraiba,
+                    medias_enem_municipios: medias_enem_municipios
                 })
             } catch (err) {
                 setDataError('Erro ao buscar dados do dashboard da Paraíba.')

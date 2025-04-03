@@ -102,10 +102,6 @@ export const TopMunicipiosMediaIdebChart: React.FC<TopMunicipiosMediaIdebChartPr
         },
       },
     },
-    title: {
-      text: 'Top 10 Municípios com Maior Média do IDEB',
-      align: 'left',
-    },
   };
 
   return <Chart options={options} series={series} type="bar" height={400} />;
