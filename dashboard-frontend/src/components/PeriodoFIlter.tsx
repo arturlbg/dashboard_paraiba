@@ -1,6 +1,6 @@
 // src/components/PeriodoFilter.tsx
 import React from 'react';
-import Select from './Select'; // Ajuste o caminho para o componente Select se necessário
+import Select from './ui/Select'; // Ajuste o caminho para o componente Select se necessário
 
 // Interfaces necessárias para o PeriodoFilter
 interface Filter {

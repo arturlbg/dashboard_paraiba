@@ -1,6 +1,6 @@
 // src/components/MunicipioFilters.tsx
 import React from 'react';
-import Select from './Select'; // Ajuste o caminho para o Select se necessário
+import Select from './ui/Select'; // Ajuste o caminho para o Select se necessário
 
 // --- Interfaces (mantidas como antes) ---
 interface Municipio {
