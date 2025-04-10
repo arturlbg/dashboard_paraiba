@@ -26,9 +26,6 @@ dashboard-backend/bin/
 dashboard-backend/pkg/
 dashboard-backend/tmp/
 
-dashboard-backend/go.sum
-dashboard-backend/go.mod~
-
 dashboard-backend/.env
 dashboard-backend/.env.local
 
