@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+	"os"
 	"rest-go/controller"
 	"rest-go/middleware"
 
@@ -8,7 +10,6 @@ import (
 )
 
 func StartRouter() {
-
 	router := gin.Default()
 
 	router.Use(middleware.CorsMiddleware())
@@ -22,5 +23,17 @@ func StartRouter() {
 	router.GET("/estados/despesas", controller.GetEstadoDespesas)
 	router.GET("/enem/medias/estados", controller.GetMediasEnemParaiba)
 
-	router.Run("localhost:8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+	err := router.Run(addr)
+	if err != nil {
+		fmt.Println("Erro ao iniciar o servidor:", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Servidor Go rodando em %s\n", addr)
 }
