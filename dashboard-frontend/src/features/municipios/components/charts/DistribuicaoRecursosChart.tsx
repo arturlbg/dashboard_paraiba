@@ -49,11 +49,10 @@ export function DistribuicaoRecursosChart({
       horizontalAlign: 'center',
       fontSize: '13px',
       offsetY: 5,
-       markers: {
-           width: 12,
-           height: 12,
-           radius: 12, // Rounded legend markers
-       },
+      markers: {
+        size: 12, // Use 'size' para definir a largura e altura do marcador
+        radius: 12, // Rounded legend markers
+      },
        itemMargin: {
            horizontal: 5,
            vertical: 3

@@ -152,10 +152,13 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
         style: { color: '#555', fontSize: '12px', fontWeight: 500 }
       },
       labels: {
-          formatter: (val: number) => val.toFixed(1), // Format X-axis labels
-          style: { colors: '#555', fontSize: '11px' }
+        formatter: (value: string | number, timestamp?: number, opts?: any) => { // Ajuste a assinatura
+          const numericValue = typeof value === 'number' ? value : parseFloat(value);
+          return numericValue.toFixed(1);
+        },
+        style: { colors: '#555', fontSize: '11px' }
       }
-    },
+    },,
     yaxis: {
       title: {
         // text: 'Município', // Often redundant with labels

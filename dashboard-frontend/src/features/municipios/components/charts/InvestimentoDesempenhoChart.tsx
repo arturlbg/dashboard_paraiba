@@ -45,10 +45,11 @@ export function InvestimentoDesempenhoChart({
          }
       },
       labels: {
-        formatter: (value: number) => { // Format large numbers on axis
-          if (value >= 1e6) return (value / 1e6).toFixed(1) + ' Mi';
-          if (value >= 1e3) return (value / 1e3).toFixed(0) + ' Mil';
-          return value.toFixed(0);
+        formatter: (value: string | number, timestamp?: number, opts?: any) => { // Ajuste a assinatura
+          const numericValue = typeof value === 'number' ? value : parseFloat(value);
+          if (numericValue >= 1e6) return (numericValue / 1e6).toFixed(1) + ' Mi';
+          if (numericValue >= 1e3) return (numericValue / 1e3).toFixed(0) + ' Mil';
+          return numericValue.toFixed(0);
         },
          style: {
              fontSize: '11px',

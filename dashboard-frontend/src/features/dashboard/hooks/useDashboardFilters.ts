@@ -5,16 +5,7 @@ import {
   fetchMunicipios,
   fetchMunicipiosDespesas
 } from '../../../services/api'; // Corrected path
-import { Municipio, MediaEnem, IndicadorEducacional, DespesaMunicipio, Ano } from '../../../types'; // Assuming types are defined
-
-// Define a specific type for the hook's return value
-interface DashboardFilterData {
-  municipios: Municipio[];
-  anos: Ano[]; // Use the Ano type
-  mediasEnem: MediaEnem[];
-  indicadores: IndicadorEducacional[];
-  despesasMunicipios: DespesaMunicipio[];
-}
+import { Municipio, MediaEnem, IndicadorEducacional, DespesaMunicipio, Ano, DashboardFilterData } from '../../../types'; // Assuming types are defined
 
 interface UseDashboardFiltersReturn {
   filterData: DashboardFilterData | null;
