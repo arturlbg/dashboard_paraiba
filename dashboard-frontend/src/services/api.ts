@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Municipio, DespesaMunicipio, MediaEnem, IndicadorEducacional, IndicadorEducacionalMunicipio, Despesa, MediaEnemMunicipio, FaqItem } from '../types'; // Import shared types
 
 // Ensure this matches your actual backend URL
-const API_BASE_URL = 'https://dashboard-paraiba-frontend.onrender.com';
+const API_BASE_URL = 'https://dashboard-paraiba.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
