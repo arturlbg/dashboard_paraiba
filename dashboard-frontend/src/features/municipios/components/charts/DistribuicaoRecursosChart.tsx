@@ -51,7 +51,6 @@ export function DistribuicaoRecursosChart({
       offsetY: 5,
       markers: {
         size: 12, // Use 'size' para definir a largura e altura do marcador
-        radius: 12, // Rounded legend markers
       },
        itemMargin: {
            horizontal: 5,
