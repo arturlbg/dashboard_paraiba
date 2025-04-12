@@ -158,7 +158,7 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
         },
         style: { colors: '#555', fontSize: '11px' }
       }
-    },,
+    },
     yaxis: {
       title: {
         // text: 'Município', // Often redundant with labels
