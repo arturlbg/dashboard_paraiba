@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"rest-go/controller"
 	"rest-go/middleware"
@@ -29,10 +30,11 @@ func StartRouter() {
 	}
 
 	addr := fmt.Sprintf(":%s", port)
+	log.Printf("Tentando iniciar o servidor Gin em %s", addr) // Adicione este log
 	err := router.Run(addr)
 	if err != nil {
-		fmt.Println("Erro ao iniciar o servidor:", err)
-		os.Exit(1)
+		// Este log talvez não apareça se o Render matar o processo antes
+		log.Fatalf("Erro fatal ao iniciar o servidor Gin em %s: %v", addr, err)
 	}
 
 	fmt.Printf("Servidor Go rodando em %s\n", addr)
