@@ -1,0 +1,498 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+4. Repository files, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+<additional_info>
+
+</additional_info>
+
+</file_summary>
+
+<directory_structure>
+controller/estadoController.go
+controller/indicadorEducacionalController.go
+controller/municipioController.go
+controller/notaEnemController.go
+db/database.go
+go.mod
+main.go
+middleware/cors.go
+models/models.go
+router/router.go
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="controller/estadoController.go">
+package controller
+
+import (
+	"net/http"
+
+	"rest-go/db"
+	"rest-go/models"
+
+	"github.com/gin-gonic/gin"
+)
+
+func GetEstadoDespesas(c *gin.Context) {
+	var despesas []models.Despesa
+	result := db.DB.
+		Model(&models.Despesa{}).
+		Select(`
+			ano,
+			SUM(despesa_total) as despesa_total
+		`).
+		Group("ano").
+		Order("ano").
+		Scan(&despesas)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, despesas)
+}
+
+func GetMediasEnemParaiba(c *gin.Context) {
+	var indicador []models.MediaEnemAgrupadaMunicipio
+
+	result := db.DB.
+		Model(&models.MediaEnemAgrupadaMunicipio{}).
+		Select(`
+			ano,
+			AVG(media_geral) AS media_geral,
+			AVG(media_cn) AS media_cn,
+			AVG(media_ch) AS media_ch,
+			AVG(media_lc) AS media_lc,
+			AVG(media_mt) AS media_mt,
+			AVG(media_red) AS media_red
+		`).
+		Group("ano").
+		Order("ano").
+		Scan(&indicador)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, indicador)
+}
+</file>
+
+<file path="controller/indicadorEducacionalController.go">
+package controller
+
+import (
+	"net/http"
+
+	"rest-go/db"
+	"rest-go/models"
+
+	"github.com/gin-gonic/gin"
+)
+
+func GetIndicadoresEducacionais(c *gin.Context) {
+	var indicadores []models.IdebEscolas
+	result := db.DB.Find(&indicadores)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, indicadores)
+}
+
+func GetIndicadorEducacionalParaiba(c *gin.Context) {
+	var indicador []models.IdebEscolas
+
+	result := db.DB.
+		Table("ideb_escolas").
+		Select(`
+			ano,
+			AVG(ideb) AS ideb,
+			AVG(fluxo) AS fluxo,
+			AVG(nota_mt) AS nota_mt,
+			AVG(nota_lp) AS nota_lp
+		`).
+		Group("ano").
+		Order("ano").
+		Scan(&indicador)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, indicador)
+}
+</file>
+
+<file path="controller/municipioController.go">
+package controller
+
+import (
+	"net/http"
+
+	"rest-go/db"
+	"rest-go/models"
+
+	"github.com/gin-gonic/gin"
+)
+
+func GetMunicipios(c *gin.Context) {
+	var municipios []models.Municipio
+	result := db.DB.Find(&municipios)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, municipios)
+}
+
+func GetMunicipiosDespesas(c *gin.Context) {
+	var despesas []models.Despesa
+	result := db.DB.Find(&despesas)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, despesas)
+}
+</file>
+
+<file path="controller/notaEnemController.go">
+package controller
+
+import (
+	"net/http"
+
+	"rest-go/db"
+	"rest-go/models"
+
+	"github.com/gin-gonic/gin"
+)
+
+func GetNotasEnem(c *gin.Context) {
+	var notas []models.NotaEnem
+	result := db.DB.Find(&notas)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, notas)
+}
+
+func GetMediasEnemAgrupadaMunicipio(c *gin.Context) {
+	var medias []models.MediaEnemAgrupadaMunicipio
+	result := db.DB.Debug().Find(&medias)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, medias)
+}
+</file>
+
+<file path="db/database.go">
+package db
+
+import (
+	"fmt"
+	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+
+func ConectarDB() {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=America/Sao_Paulo",
+		"dpg-cvs5r249c44c739q3m30-a",
+		"arturgurjao",
+		"B91i0iB4eiqKiWTDtmrfTLbKV8EDm5hV",
+		"dashboard_5ya7",
+		5432,
+	)
+
+	var err error
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Erro ao conectar ao banco:", err)
+	}
+
+	fmt.Println("✅ Conectado ao PostgreSQL com sucesso!")
+}
+</file>
+
+<file path="go.mod">
+module rest-go
+
+go 1.23.6
+
+require (
+	github.com/gin-contrib/cors v1.7.5
+	github.com/gin-gonic/gin v1.10.0
+	gorm.io/driver/postgres v1.5.11
+	gorm.io/gorm v1.25.12
+)
+
+require (
+	github.com/bytedance/sonic v1.13.2 // indirect
+	github.com/bytedance/sonic/loader v0.2.4 // indirect
+	github.com/cloudwego/base64x v0.1.5 // indirect
+	github.com/cloudwego/iasm v0.2.0 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
+	github.com/gin-contrib/sse v1.1.0 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.26.0 // indirect
+	github.com/goccy/go-json v0.10.5 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/pgx/v5 v5.7.4 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
+	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ugorji/go/codec v1.2.12 // indirect
+	golang.org/x/arch v0.16.0 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+</file>
+
+<file path="main.go">
+package main
+
+import (
+	"log"
+	"rest-go/db"
+	"rest-go/router"
+)
+
+func main() {
+	db.ConectarDB()
+
+	if db.DB == nil {
+		log.Fatal("Erro fatal: Conexão com o banco de dados falhou!")
+	}
+
+	log.Println("Conexão com DB (aparentemente) OK. Iniciando roteador...")
+	router.StartRouter()
+}
+</file>
+
+<file path="middleware/cors.go">
+package middleware
+
+import (
+	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+)
+
+func CorsMiddleware() gin.HandlerFunc {
+	return cors.New(cors.Config{
+		AllowOrigins: []string{
+			"https://dashboard-paraiba-frontend.onrender.com",
+			"http://localhost:5173",
+			"https://outro-dominio-permitido.com",
+		},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	})
+}
+</file>
+
+<file path="models/models.go">
+package models
+
+type NotaEnem struct {
+	NUInscricao      string  `json:"nu_inscricao"`
+	TPDependenciaADM float64 `json:"tp_dependencia_adm_esc"`
+	NomeMunicipio    string  `json:"no_municipio_prova"`
+	SiglaUF          string  `json:"sg_uf_prova"`
+	NotaCN           float64 `json:"nu_nota_cn"`
+	NotaCH           float64 `json:"nu_nota_ch"`
+	NotaLC           float64 `json:"nu_nota_lc"`
+	NotaMT           float64 `json:"nu_nota_mt"`
+	NotaRedacao      float64 `json:"nu_nota_redacao"`
+	Ano              string  `json:"ano"`
+	Media            float64 `json:"media"`
+}
+
+type MediaEnemAgrupadaMunicipio struct {
+	Nome       string  `json:"nome"`
+	MediaGeral float64 `json:"media_geral"`
+	MediaCN    float64 `json:"media_cn"`
+	MediaCH    float64 `json:"media_ch"`
+	MediaLC    float64 `json:"media_lc"`
+	MediaMT    float64 `json:"media_mt"`
+	MediaRed   float64 `json:"media_red"`
+	Ano        string  `json:"ano"`
+}
+
+type Municipio struct {
+	ID                   uint    `json:"id" gorm:"primaryKey;autoIncrement"`
+	Nome                 string  `json:"nome" gorm:"column:nome"`
+	AreaTerritorial      float64 `json:"area_territorial"`
+	Populacao            int64   `json:"populacao"`
+	DensidadeDemografica float64 `json:"densidade_demografica"`
+	Idhm                 float64 `json:"idhm"`
+	ReceitasBrutas       float64 `json:"receitas_brutas"`
+	DespesasBrutas       float64 `json:"despesas_brutas"`
+	PibPerCapita         float64 `json:"pib_per_capita"`
+}
+
+type IdebEscolas struct {
+	ID            uint    `json:"id"`
+	IBGEID        int     `json:"ibge_id"`
+	DependenciaID int     `json:"dependencia_id"`
+	CicloID       string  `json:"ciclo_id"`
+	Ano           int     `json:"ano"`
+	Ideb          float64 `json:"ideb"`
+	Fluxo         float64 `json:"fluxo"`
+	Aprendizado   float64 `json:"aprendizado"`
+	NotaMT        float64 `json:"nota_mt"`
+	NotaLP        float64 `json:"nota_lp"`
+	NomeMunicipio string  `json:"nome_municipio"`
+	Dependencia   string  `json:"dependencia"`
+}
+
+type Despesa struct {
+	NomeMunicipio   string  `json:"nome_municipio"`
+	CodigoMunicipio string  `json:"codigo_municipio"`
+	Estagio         string  `json:"estagio"`
+	Ano             string  `json:"ano"`
+	DespesaTotal    float64 `json:"despesa_total"`
+}
+
+func (Municipio) TableName() string {
+	return "view_municipios"
+}
+
+func (Despesa) TableName() string {
+	return "view_despesas_municipais_educacao"
+}
+
+func (NotaEnem) TableName() string {
+	return "notas_enem"
+}
+
+func (MediaEnemAgrupadaMunicipio) TableName() string {
+	return "view_media_enem_agrupada_municipio"
+}
+
+func (IdebEscolas) TableName() string {
+	return "view_indicadores_educacionais"
+}
+</file>
+
+<file path="router/router.go">
+package router
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"rest-go/controller"
+	"rest-go/middleware"
+
+	"github.com/gin-gonic/gin"
+)
+
+func StartRouter() {
+	router := gin.Default()
+
+	router.Use(middleware.CorsMiddleware())
+
+	router.GET("/municipios", controller.GetMunicipios)
+	router.GET("/municipios/despesas", controller.GetMunicipiosDespesas)
+	router.GET("/enem/notas", controller.GetNotasEnem)
+	router.GET("/enem/medias", controller.GetMediasEnemAgrupadaMunicipio)
+	router.GET("/municipios/ideb/indicadores", controller.GetIndicadoresEducacionais)
+	router.GET("/estados/ideb/indicadores", controller.GetIndicadorEducacionalParaiba)
+	router.GET("/estados/despesas", controller.GetEstadoDespesas)
+	router.GET("/enem/medias/estados", controller.GetMediasEnemParaiba)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "10000"
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+	log.Printf("Tentando iniciar o servidor Gin em %s", addr) // Adicione este log
+	err := router.Run(addr)
+	if err != nil {
+		// Este log talvez não apareça se o Render matar o processo antes
+		log.Fatalf("Erro fatal ao iniciar o servidor Gin em %s: %v", addr, err)
+	}
+
+	fmt.Printf("Servidor Go rodando em %s\n", addr)
+}
+</file>
+
+</files>

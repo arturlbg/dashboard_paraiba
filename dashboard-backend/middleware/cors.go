@@ -12,7 +12,6 @@ func CorsMiddleware() gin.HandlerFunc {
 		AllowOrigins: []string{
 			"https://dashboard-paraiba-frontend.onrender.com",
 			"http://localhost:5173",
-			"https://outro-dominio-permitido.com",
 		},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},

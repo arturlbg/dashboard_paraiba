@@ -26,7 +26,7 @@ func StartRouter() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "10000"
+		port = "8080"
 	}
 
 	addr := fmt.Sprintf(":%s", port)
