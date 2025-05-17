@@ -481,7 +481,7 @@ export const ParaibaDashboard: React.FC<DashboardParaibaProps> = ({
           {renderSummaryCards()}
           {renderParaibaMap()}
           {renderCharts()}
-          {dashboardMeta?.faqs && <FaqSection faqs={dashboardMeta.faqs} />}
+          {/*dashboardMeta?.faqs && <FaqSection faqs={dashboardMeta.faqs} />*/}
         </>
       ) : (
         !isLoadingParaibaData && (

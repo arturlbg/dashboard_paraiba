@@ -366,7 +366,7 @@ export const MunicipiosDashboard: React.FC<MunicipiosDashboardProps> = ({
                      </div>
                 )}
                 {/* Renderiza FAQs (se existirem nos dados do dashboard) */}
-                {dashboardData?.faqs && <FaqSection faqs={dashboardData.faqs} />}
+                {/*dashboardData?.faqs && <FaqSection faqs={dashboardData.faqs} />*/}
             </>
         )}
         {/* Mensagem inicial ou de erro já tratada acima */}

@@ -11,7 +11,7 @@ interface DesempenhoDisciplinaChartProps {
 export function DesempenhoDisciplinaChart({
     series,
     categories,
-    title = "Desempenho por Disciplina"
+    title = "Desempenho por Área"
 }: DesempenhoDisciplinaChartProps): JSX.Element {
 
   const options: ApexOptions = {
