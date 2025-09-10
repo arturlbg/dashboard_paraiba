@@ -1,6 +1,6 @@
 # Dashboard Educacional - Paraíba
 
-Este projeto é um dashboard interativo desenvolvido em React com Vite, TypeScript e TailwindCSS para visualização de dados educacionais do estado da Paraíba e seus municípios. Ele utiliza ApexCharts para a geração de gráficos e Leaflet para mapas.
+Este projeto é um dashboard interativo para a visualização de dados educacionais do estado da Paraíba e seus municípios. O frontend foi construído com React, Vite, e TypeScript, também utilizando TailwindCSS, ApexCharts para gráficos dinâmicos e Leaflet para mapas interativos. O backend consiste em uma API REST desenvolvida em Golang  com o framework Gin, a persistência dos dados são feitas em um banco PostgreSQL.
 
 ## Visão Geral
 
@@ -17,8 +17,6 @@ O dashboard oferece duas visualizações principais:
 
 <img width="1882" height="832" alt="TopInvestimento" src="https://github.com/user-attachments/assets/6940c0f0-a61f-4465-8c83-6b5767baffef" />
 
-
-
 ## Funcionalidades
 
 * Visualização de dados através de cards informativos e gráficos interativos (Barras, Linhas, Radar, Pizza, Dispersão).  
@@ -28,7 +26,7 @@ O dashboard oferece duas visualizações principais:
 * Design responsivo utilizando TailwindCSS.  
 * Indicador de carregamento durante a busca de dados.  
 
-## Estrutura do Projeto (FrontEnd)
+## Estrutura do Projeto (FrontEnd - React)
 
 O projeto foi refatorado para seguir uma estrutura baseada em features, visando melhor organização e manutenibilidade:
 
@@ -48,3 +46,31 @@ O projeto foi refatorado para seguir uma estrutura baseada em features, visando 
 ├── utils/              # Funções utilitárias
 └── main.tsx            # Ponto de entrada da aplicação
 
+## Estrutura do Projeto (Back-end - Go)
+
+O backend é uma API REST desenvolvida em Go com o framework Gin. Ele é responsável por servir os dados educacionais para o frontend, consultando um banco de dados PostgreSQL. A estrutura foi organizada por responsabilidade para promover a clareza e a manutenibilidade.
+
+```text
+/
+├── controller/         # Camada de controle (handlers) que lida com as requisições HTTP.
+│   ├── estadoController.go               # Handlers para endpoints de dados consolidados do estado.
+│   ├── indicadorEducacionalController.go # Handlers para endpoints de indicadores (IDEB, etc).
+│   ├── municipioController.go            # Handlers para endpoints de dados de municípios.
+│   └── notaEnemController.go             # Handlers para endpoints de notas do ENEM.
+│
+├── db/                 # Módulo de acesso ao banco de dados.
+│   └── database.go     # Função para configurar e estabelecer a conexão com o PostgreSQL usando GORM.
+│
+├── middleware/         # Middlewares para o framework Gin.
+│   └── cors.go         # Middleware para configurar o Cross-Origin Resource Sharing (CORS).
+│
+├── models/             # Definição das estruturas de dados (structs).
+│   └── models.go       # Structs que mapeiam as tabelas e views do banco de dados para o Go (ORM).
+│
+├── router/             # Configuração das rotas da API.
+│   └── router.go       # Define todos os endpoints da API, associando-os aos seus respectivos controllers.
+│
+├── go.mod              # Arquivo de definição do módulo Go e suas dependências.
+├── go.sum              # Checksums das dependências para garantir a integridade.
+└── main.go             # Ponto de entrada da aplicação. Inicializa o DB e o servidor.
+```
