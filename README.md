@@ -9,6 +9,16 @@ O dashboard oferece duas visualizações principais:
 1. **Visão Geral (PB):** Apresenta dados consolidados para o estado da Paraíba, incluindo evolução do IDEB, investimento em educação, médias do ENEM, e rankings municipais. Inclui um mapa interativo do IDEB por município.  
 2. **Por Município:** Permite ao usuário selecionar um município e um ano específicos para visualizar dados detalhados, como informações gerais do município, indicadores educacionais (IDEB, SAEB), médias do ENEM por área, comparação com a média estadual, e a relação entre investimento e desempenho no ENEM.
 
+<img width="1907" height="443" alt="TelaInicial" src="https://github.com/user-attachments/assets/7970a95c-7981-4097-9c26-01e3f36a0c50" />
+
+<img width="1896" height="861" alt="TelaMunicipios" src="https://github.com/user-attachments/assets/9c1f0bd6-1ad0-4d68-925b-13e2f7a8b0b6" />
+
+<img width="1885" height="826" alt="IdebParaiba" src="https://github.com/user-attachments/assets/361264e9-bf8e-4fdd-ac90-e4a797c9e36a" />
+
+<img width="1882" height="832" alt="TopInvestimento" src="https://github.com/user-attachments/assets/6940c0f0-a61f-4465-8c83-6b5767baffef" />
+
+
+
 ## Funcionalidades
 
 * Visualização de dados através de cards informativos e gráficos interativos (Barras, Linhas, Radar, Pizza, Dispersão).  
