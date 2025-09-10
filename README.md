@@ -45,11 +45,10 @@ O projeto foi refatorado para seguir uma estrutura baseada em features, visando 
 ├── types/              # Definições de tipos TypeScript compartilhadas
 ├── utils/              # Funções utilitárias
 └── main.tsx            # Ponto de entrada da aplicação
-
+```
 ## Estrutura do Projeto (Back-end - Go)
 
-O backend é uma API REST desenvolvida em Go com o framework Gin. Ele é responsável por servir os dados educacionais para o frontend, consultando um banco de dados PostgreSQL. A estrutura foi organizada por responsabilidade para promover a clareza e a manutenibilidade.
-
+O backend é uma API REST desenvolvida em Go com o framework Gin.
 ```text
 /
 ├── controller/         # Camada de controle (handlers) que lida com as requisições HTTP.
