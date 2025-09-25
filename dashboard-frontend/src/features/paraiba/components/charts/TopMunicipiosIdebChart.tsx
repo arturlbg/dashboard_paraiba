@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import Select from '../../../../components/ui/Select'; // Use the central Select component
-import { DespesaMunicipio, IndicadorEducacional } from '../../../../types'; // Import types
+import Select from '../../../../components/ui/Select';
+import { DespesaMunicipio, IndicadorEducacional } from '../../../../types';
 
-// Define combined data structure
 interface MunicipioDespesaIndicador {
   nome_municipio: string;
   ano: number;
@@ -13,13 +12,11 @@ interface MunicipioDespesaIndicador {
   nota_lp: number;
 }
 
-// Props for the component
 interface TopMunicipiosChartProps {
   dadosDespesa: DespesaMunicipio[];
   dadosIdeb: IndicadorEducacional[]; // Renamed prop
 }
 
-// Define types for Select options
 interface AnoOption { ano: number; }
 interface TipoSaebOption { value: 'matematica' | 'portugues'; label: string; }
 
@@ -28,15 +25,14 @@ const tipoSaebOptions: TipoSaebOption[] = [
     { value: 'portugues', label: 'Língua Portuguesa' }
 ];
 
-const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespesa, dadosIdeb }) => { // Renamed prop used
+const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespesa, dadosIdeb }) => { 
   const [anoSelecionado, setAnoSelecionado] = useState<number | null>(null);
-  const [tipoSaeb, setTipoSaeb] = useState<TipoSaebOption>(tipoSaebOptions[0]); // Default to Matemática object
+  const [tipoSaeb, setTipoSaeb] = useState<TipoSaebOption>(tipoSaebOptions[0]);
   const [topInvestimento, setTopInvestimento] = useState<boolean>(true);
   const [numMunicipios, setNumMunicipios] = useState<number>(10);
   const [anosDisponiveis, setAnosDisponiveis] = useState<AnoOption[]>([]);
   const [dadosCombinados, setDadosCombinados] = useState<MunicipioDespesaIndicador[]>([]);
 
-  // Function to combine expense and indicator data
   const combinarDadosFunction = useCallback((despesas: DespesaMunicipio[], indicadores: IndicadorEducacional[]): MunicipioDespesaIndicador[] => {
     const dadosMap = new Map<string, Partial<MunicipioDespesaIndicador>>();
 
@@ -51,15 +47,13 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
     indicadores.forEach(indicador => {
        const key = `${indicador.nome_municipio}-${indicador.ano}`;
        if (!dadosMap.has(key)) {
-          // If only indicator exists, still include (despesa might be 0 or missing)
            dadosMap.set(key, { nome_municipio: indicador.nome_municipio, ano: Number(indicador.ano) });
        }
         const entry = dadosMap.get(key)!;
-       entry.nota_mt = typeof indicador.nota_mt === 'number' ? indicador.nota_mt : 0; // Handle potential null/undefined
+       entry.nota_mt = typeof indicador.nota_mt === 'number' ? indicador.nota_mt : 0;
        entry.nota_lp = typeof indicador.nota_lp === 'number' ? indicador.nota_lp : 0;
     });
 
-    // Convert map back to array, ensuring all required fields exist (defaulting if necessary)
     return Array.from(dadosMap.values()).map(item => ({
         nome_municipio: item.nome_municipio!,
         ano: item.ano!,
@@ -69,63 +63,56 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
     }));
   }, []);
 
-  // Effect to process data when input props change
   useEffect(() => {
-    const combined = combinarDadosFunction(dadosDespesa, dadosIdeb); // Use renamed prop
+    const combined = combinarDadosFunction(dadosDespesa, dadosIdeb);
     setDadosCombinados(combined);
 
     const uniqueAnos = [...new Set(combined.map(item => item.ano))]
       .sort((a, b) => a - b)
-      .map(ano => ({ ano })); // Format for Select component
+      .map(ano => ({ ano }));
     setAnosDisponiveis(uniqueAnos);
 
-    // Set default selected year if available and not already set
     if (uniqueAnos.length > 0 && anoSelecionado === null) {
       setAnoSelecionado(uniqueAnos[0].ano);
     } else if (uniqueAnos.length === 0) {
-        // Handle case with no common years
         setAnoSelecionado(null);
     }
 
-  }, [dadosDespesa, dadosIdeb, combinarDadosFunction, anoSelecionado]); // Re-run if base data changes, use renamed prop
+  }, [dadosDespesa, dadosIdeb, combinarDadosFunction, anoSelecionado]);
 
- // Function to get top/bottom municipalities based on criteria
  const getTopMunicipios = useCallback((ano: number | null, top: boolean, n: number, tipo: 'matematica' | 'portugues', data: MunicipioDespesaIndicador[]): { nome_municipio: string; despesa_total: number; nota: number }[] => {
     if (!ano) return [];
 
     const dadosAno = data.filter(item => item.ano === ano);
 
-    // Filter out municipalities with zero notes for the selected subject
     const municipiosFiltrados = dadosAno.filter(m => (tipo === 'matematica' ? m.nota_mt : m.nota_lp) > 0);
 
-     // Sort based on investment (despesa_total)
     const sortedByInvestment = [...municipiosFiltrados].sort((a, b) => {
       return top ? b.despesa_total - a.despesa_total : a.despesa_total - b.despesa_total;
     });
 
-     // Take the top/bottom 'n' and format for the chart
     return sortedByInvestment.slice(0, n).map(m => ({
         nome_municipio: m.nome_municipio,
         despesa_total: m.despesa_total,
         nota: tipo === 'matematica' ? m.nota_mt : m.nota_lp,
-    })).sort((a, b) => b.nota - a.nota); // Sort final list by note for better bar chart readability
+    })).sort((a, b) => b.nota - a.nota);
 
-  }, []); // No external dependencies needed for the logic itself
+  }, []);
 
-  // Calculate filtered municipalities for the chart
+
   const municipiosParaGrafico = useMemo(() => {
       return anoSelecionado ? getTopMunicipios(anoSelecionado, topInvestimento, numMunicipios, tipoSaeb.value, dadosCombinados) : [];
   }, [anoSelecionado, topInvestimento, numMunicipios, tipoSaeb.value, dadosCombinados, getTopMunicipios]);
 
 
-  // Chart Series and Options
+
   const series = [
     {
       name: topInvestimento ? `Top ${numMunicipios} Investimento` : `Menor ${numMunicipios} Investimento`,
       data: municipiosParaGrafico.map(m => ({
         x: m.nome_municipio,
         y: m.nota,
-        despesa: m.despesa_total // Include expense for tooltip
+        despesa: m.despesa_total
       })),
     },
   ];
@@ -133,18 +120,18 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
   const options: ApexOptions = {
     chart: {
       type: 'bar',
-      height: 450, // Adjust height as needed
+      height: 450,
       toolbar: { show: true, tools: { download: true, selection: false, zoom: false, zoomin: false, zoomout: false, pan: false, reset: false } }, // Show only download
       fontFamily: 'Open Sans, sans-serif',
     },
     plotOptions: {
       bar: {
-        horizontal: true, // Horizontal bars often better for long labels
-        barHeight: '70%', // Adjust bar height/spacing
+        horizontal: true, 
+        barHeight: '70%',
       },
     },
     dataLabels: {
-      enabled: false, // Keep labels off bars for clarity
+      enabled: false,
     },
     xaxis: {
       title: {
@@ -152,7 +139,7 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
         style: { color: '#555', fontSize: '12px', fontWeight: 500 }
       },
       labels: {
-        formatter: (value: string | number, timestamp?: number, opts?: any) => { // Ajuste a assinatura
+        formatter: (value: string | number, timestamp?: number, opts?: any) => {
           const numericValue = typeof value === 'number' ? value : parseFloat(value);
           return numericValue.toFixed(1);
         },
@@ -161,16 +148,14 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
     },
     yaxis: {
       title: {
-        // text: 'Município', // Often redundant with labels
       },
        labels: {
          style: { colors: '#555', fontSize: '12px' }
        }
     },
     tooltip: {
-        // Custom tooltip for better formatting
         custom: ({ seriesIndex, dataPointIndex, w }: any) => {
-            if (!w.config.series[seriesIndex]?.data[dataPointIndex]) return ''; // Safety check
+            if (!w.config.series[seriesIndex]?.data[dataPointIndex]) return '';
             const data = w.config.series[seriesIndex].data[dataPointIndex];
             const despesaFormatted = data.despesa?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 }) ?? 'N/A';
             const notaFormatted = data.y?.toFixed(2) ?? 'N/A';
@@ -190,11 +175,10 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
      grid: {
          borderColor: '#e7e7e7',
          xaxis: { lines: { show: true } },
-         yaxis: { lines: { show: false } } // Hide horizontal grid lines if using horizontal bars
+         yaxis: { lines: { show: false } }
      }
   };
 
-  // Handler for slider change
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumMunicipios(parseInt(event.target.value, 10));
   };
@@ -216,7 +200,7 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
                       labelKey="ano"
                       valueKey="ano"
                       placeholder="Ano..."
-                      className="w-28" // Smaller width
+                      className="w-28"
                   />
               </div>
               <div className="flex items-center gap-2">
@@ -281,4 +265,4 @@ const TopMunicipiosIdebChart: React.FC<TopMunicipiosChartProps> = ({ dadosDespes
   );
 };
 
-export default TopMunicipiosIdebChart; // Export as default or named
+export default TopMunicipiosIdebChart;

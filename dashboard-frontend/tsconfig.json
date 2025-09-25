@@ -5,7 +5,6 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -13,7 +12,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting */
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
@@ -22,14 +20,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
 
-    /* Path Aliases (opcional) */
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@/*": ["src/*"]
-    // }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.js", "tailwind.config.ts"],
   "exclude": ["node_modules", "dist"]
-  // Remova o bloco abaixo se não precisar de tsconfig.node.json
-  // "references": [{ "path": "./tsconfig.node.json" }]
 }

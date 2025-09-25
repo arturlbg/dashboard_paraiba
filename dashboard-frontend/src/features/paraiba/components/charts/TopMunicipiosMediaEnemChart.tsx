@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { MediaEnemMunicipio } from '../../../../types'; // Assuming type defined, using more specific type
+import { MediaEnemMunicipio } from '../../../../types';
 
 interface TopMunicipiosMediaEnemChartProps {
-  dados: MediaEnemMunicipio[]; // Expecting array of ENEM averages across municipalities/years
+  dados: MediaEnemMunicipio[];
   titulo?: string;
 }
 
@@ -12,11 +12,9 @@ export const TopMunicipiosMediaEnemChart: React.FC<TopMunicipiosMediaEnemChartPr
     dados,
     titulo = "Top 10 Municípios por Média Geral do ENEM (Média Histórica)"
 }) => {
-  // 1. Calculate average ENEM score per municipality across all available years
   const municipioMedias: Record<string, { soma: number; contagem: number }> = {};
 
   dados.forEach(item => {
-    // Use 'nome' instead of 'nome_municipio' based on MediaEnemMunicipio type
     if (item.nome && typeof item.media_geral === 'number' && !isNaN(item.media_geral)) {
       if (!municipioMedias[item.nome]) {
         municipioMedias[item.nome] = { soma: 0, contagem: 0 };
@@ -26,7 +24,6 @@ export const TopMunicipiosMediaEnemChart: React.FC<TopMunicipiosMediaEnemChartPr
     }
   });
 
-  // 2. Calculate the final average for each municipality
   const municipioMediaFinal: Record<string, number> = {};
   for (const municipio in municipioMedias) {
     if (municipioMedias[municipio].contagem > 0) {
@@ -36,7 +33,6 @@ export const TopMunicipiosMediaEnemChart: React.FC<TopMunicipiosMediaEnemChartPr
     }
   }
 
-  // 3. Sort municipalities by average score (descending) and take top 10
   const topMunicipios = Object.entries(municipioMediaFinal)
     .sort(([, a], [, b]) => b - a) // Sort descending
     .slice(0, 10); // Get top 10
@@ -121,10 +117,8 @@ export const TopMunicipiosMediaEnemChart: React.FC<TopMunicipiosMediaEnemChartPr
             color: '#444'
         }
     },
-    // colors: ['#00E396'] // Example color
   };
 
-   // Render chart only if there's data
    return municipiosNomes.length > 0 ? (
       <Chart options={options} series={series} type="bar" height={400} width="100%" />
    ) : (

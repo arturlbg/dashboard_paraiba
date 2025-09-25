@@ -1,6 +1,6 @@
-import { IndicadorEducacional, MediaEnem, Despesa } from "../types"; // Import types
+import { IndicadorEducacional, MediaEnem, Despesa } from "../types";
 
-type DataItem = Record<string, any>; // Generic record type
+type DataItem = Record<string, any>;
 
 /**
  * Calculates the average of numeric properties (excluding specified keys) for an array of objects.

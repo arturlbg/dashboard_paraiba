@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { DashboardController } from './features/dashboard/DashboardController'; // Caminho corrigido
-import './index.css'; // Importa Tailwind CSS
-import './styles/fonts.css'; // Importa fontes personalizadas
+import { DashboardController } from './features/dashboard/DashboardController';
+import './index.css';
+import './styles/fonts.css';
 
 const rootElement = document.getElementById('root');
 

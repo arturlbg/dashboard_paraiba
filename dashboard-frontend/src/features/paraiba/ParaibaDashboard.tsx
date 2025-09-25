@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from 'react';
-import { FaqSection } from '../../components/ui/FaqSection'; // Corrected path
-import { useMunicipiosDashboardData } from '../municipios/hooks/useMunicipiosDashboardData'; // Used for FAQs only
-import { useParaibaData } from './hooks/useParaibaData'; // Corrected path
-import { InvestimentoEducacaoChart } from './components/charts/InvestimentoEducacaoChart'; // Corrected path
-import { TopMunicipiosInvestimentoChart } from './components/charts/TopMunicipiosInvestimentoChart'; // Corrected path
-import { IdebChart } from './components/charts/IdebChart'; // Corrected path
-import { TopMunicipiosMediaIdebChart } from './components/charts/TopMunicipiosMediaIdebChart'; // Corrected path
-import { TopMunicipiosMediaEnemChart } from './components/charts/TopMunicipiosMediaEnemChart'; // Corrected path
-import { EvolucaoMediaGeralEnemChart } from './components/charts/EvolucaoMediaGeralEnemChart'; // Corrected path
-import { ParaibaMapChart } from './components/charts/ParaibaMapChart'; // Corrected path
-import TopMunicipiosIdebChart from './components/charts/TopMunicipiosIdebChart'; // Import default export
+import { FaqSection } from '../../components/ui/FaqSection';
+import { useMunicipiosDashboardData } from '../municipios/hooks/useMunicipiosDashboardData';
+import { useParaibaData } from './hooks/useParaibaData';
+import { InvestimentoEducacaoChart } from './components/charts/InvestimentoEducacaoChart';
+import { TopMunicipiosInvestimentoChart } from './components/charts/TopMunicipiosInvestimentoChart';
+import { IdebChart } from './components/charts/IdebChart';
+import { TopMunicipiosMediaIdebChart } from './components/charts/TopMunicipiosMediaIdebChart';
+import { TopMunicipiosMediaEnemChart } from './components/charts/TopMunicipiosMediaEnemChart';
+import { EvolucaoMediaGeralEnemChart } from './components/charts/EvolucaoMediaGeralEnemChart';
+import { ParaibaMapChart } from './components/charts/ParaibaMapChart';
+import TopMunicipiosIdebChart from './components/charts/TopMunicipiosIdebChart';
 import {
   IndicadorEducacional,
   Despesa,
@@ -18,9 +18,8 @@ import {
   DespesaMunicipio,
   MediaEnemMunicipio,
   FaqItem,
-} from '../../types'; // Import types
+} from '../../types';
 
-// Define the structure for the map data
 interface IdebDataMap {
   [ano: string]: {
     [municipio: string]: number;
@@ -472,7 +471,6 @@ export const ParaibaDashboard: React.FC<DashboardParaibaProps> = ({
     </div>
   );
 
-  // --- Renderização Principal ---
   return (
     <div className="w-full">
       {data ? (
@@ -481,7 +479,7 @@ export const ParaibaDashboard: React.FC<DashboardParaibaProps> = ({
           {renderSummaryCards()}
           {renderParaibaMap()}
           {renderCharts()}
-          {dashboardMeta?.faqs && <FaqSection faqs={dashboardMeta.faqs} />}
+          {/* dashboardMeta?.faqs && <FaqSection faqs={dashboardMeta.faqs} /> */}
         </>
       ) : (
         !isLoadingParaibaData && (

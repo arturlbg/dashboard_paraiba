@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { MediaEnem } from '../../../../types'; // Assuming type defined
+import { MediaEnem } from '../../../../types';
 
 interface EvolucaoMediaGeralEnemChartProps {
-  dados: MediaEnem[]; // Expecting array of state-level ENEM averages
+  dados: MediaEnem[];
   titulo?: string;
 }
 
@@ -13,11 +13,9 @@ export const EvolucaoMediaGeralEnemChart: React.FC<EvolucaoMediaGeralEnemChartPr
     titulo = "Evolução da Média Geral do ENEM na Paraíba"
 }) => {
 
-  // Sort data by year ensure correct order
   const sortedDados = [...dados].sort((a, b) => parseInt(a.ano) - parseInt(b.ano));
 
   const anos = sortedDados.map(item => item.ano);
-  // Ensure media_geral is treated as a number and handle potential null/undefined
   const mediasGerais = sortedDados.map(item => typeof item.media_geral === 'number' ? parseFloat(item.media_geral.toFixed(2)) : 0);
 
   const series = [
@@ -37,7 +35,7 @@ export const EvolucaoMediaGeralEnemChart: React.FC<EvolucaoMediaGeralEnemChartPr
     },
     dataLabels: {
       enabled: true,
-      formatter: (value: number) => value.toFixed(2), // Format labels on points
+      formatter: (value: number) => value.toFixed(2),
       offsetY: -5,
        style: {
            fontSize: '11px',
@@ -71,7 +69,7 @@ export const EvolucaoMediaGeralEnemChart: React.FC<EvolucaoMediaGeralEnemChartPr
         style: { color: '#555', fontSize: '12px', fontWeight: 500 }
       },
       labels: {
-         formatter: (value: number) => value.toFixed(1), // Format Y-axis
+         formatter: (value: number) => value.toFixed(1),
           style: {
              fontSize: '12px',
              colors: '#555',
@@ -80,10 +78,10 @@ export const EvolucaoMediaGeralEnemChart: React.FC<EvolucaoMediaGeralEnemChartPr
     },
     tooltip: {
       y: {
-        formatter: (value: number) => value.toFixed(2), // Format tooltip
+        formatter: (value: number) => value.toFixed(2),
       },
       x: {
-          format: 'yyyy' // Treat x-axis as years
+          format: 'yyyy'
       }
     },
     grid: {
@@ -104,7 +102,6 @@ export const EvolucaoMediaGeralEnemChart: React.FC<EvolucaoMediaGeralEnemChartPr
     }
   };
 
-  // Render chart only if there's valid data
   return anos.length > 0 ? (
       <Chart options={options} series={series} type="line" height={350} width="100%" />
   ) : (

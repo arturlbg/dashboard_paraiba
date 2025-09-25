@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { IndicadorEducacionalMunicipio } from '../../../../types'; // Import type, using more specific type
+import { IndicadorEducacionalMunicipio } from '../../../../types';
 
 interface TopMunicipiosMediaIdebChartProps {
-  dados: IndicadorEducacionalMunicipio[]; // Expecting array of IDEB indicators across municipalities/years
+  dados: IndicadorEducacionalMunicipio[];
   titulo?: string;
 }
 
@@ -12,11 +12,9 @@ export const TopMunicipiosMediaIdebChart: React.FC<TopMunicipiosMediaIdebChartPr
     dados,
     titulo = "Top 10 Municípios por Média IDEB (Média Histórica)"
 }) => {
-  // 1. Calculate average IDEB score per municipality across all available years
   const municipioMedias: Record<string, { soma: number; contagem: number }> = {};
 
   dados.forEach(item => {
-    // Ensure valid data before processing
     if (item.nome_municipio && typeof item.ideb === 'number' && !isNaN(item.ideb) && item.ideb > 0) {
       if (!municipioMedias[item.nome_municipio]) {
         municipioMedias[item.nome_municipio] = { soma: 0, contagem: 0 };
@@ -26,7 +24,6 @@ export const TopMunicipiosMediaIdebChart: React.FC<TopMunicipiosMediaIdebChartPr
     }
   });
 
-  // 2. Calculate the final average for each municipality
   const municipioMediaFinal: Record<string, number> = {};
   for (const municipio in municipioMedias) {
     if (municipioMedias[municipio].contagem > 0) {
@@ -36,7 +33,6 @@ export const TopMunicipiosMediaIdebChart: React.FC<TopMunicipiosMediaIdebChartPr
     }
   }
 
-  // 3. Sort municipalities by average score (descending) and take top 10
   const topMunicipios = Object.entries(municipioMediaFinal)
     .sort(([, a], [, b]) => b - a) // Sort descending
     .slice(0, 10); // Get top 10
@@ -121,10 +117,8 @@ export const TopMunicipiosMediaIdebChart: React.FC<TopMunicipiosMediaIdebChartPr
             color: '#444'
         }
     },
-    // colors: ['#FEB019'] // Example color
   };
 
-   // Render chart only if there's data
    return municipiosNomes.length > 0 ? (
      <Chart options={options} series={series} type="bar" height={400} width="100%" />
   ) : (

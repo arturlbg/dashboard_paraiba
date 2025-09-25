@@ -1,7 +1,5 @@
-// Define shared interfaces used across features/components
-
 export interface Municipio {
-    id?: number; // Optional if not always present/needed
+    id?: number; 
     nome: string;
     area_territorial?: number;
     populacao?: number;
@@ -21,44 +19,39 @@ export interface Municipio {
     answer: string;
   }
   
-  // Data structure for state-level expense data
   export interface Despesa {
-      nome_municipio?: string; // Might be null/undefined for state level
+      nome_municipio?: string;
       codigo_municipio?: string;
       estagio?: string;
       ano: string;
       despesa_total: number;
   }
   
-  // Data structure for municipality-level expense data
   export interface DespesaMunicipio extends Despesa {
-      nome_municipio: string; // Required for municipality level
+      nome_municipio: string;
   }
   
-  // Data structure for state-level educational indicators
   export interface IndicadorEducacional {
       id?: number;
       ibge_id?: number;
       dependencia_id?: number;
       ciclo_id?: string;
-      ano: number; // Changed to number based on usage
+      ano: number; 
       ideb: number;
       fluxo: number;
       aprendizado?: number;
       nota_mt: number;
       nota_lp: number;
-      nome_municipio?: string; // Might be null/undefined for state level
+      nome_municipio?: string;
       dependencia?: string;
   }
   
-  // Data structure for municipality-level educational indicators
   export interface IndicadorEducacionalMunicipio extends IndicadorEducacional {
-      nome_municipio: string; // Required for municipality level
+      nome_municipio: string;
   }
   
-  // Data structure for state-level ENEM averages
   export interface MediaEnem {
-    nome?: string; // Might be null/undefined for state level
+    nome?: string;
     media_geral: number;
     media_cn?: number;
     media_ch?: number;
@@ -68,12 +61,10 @@ export interface Municipio {
     ano: string;
   }
   
-  // Data structure for municipality-level ENEM averages
   export interface MediaEnemMunicipio extends MediaEnem {
-      nome: string; // Required for municipality level
+      nome: string;
   }
   
-  // Type for the combined filter data used by the dashboard controller/hooks
   export interface DashboardFilterData {
     municipios: Municipio[];
     anos: Ano[];
@@ -81,7 +72,3 @@ export interface Municipio {
     indicadores: IndicadorEducacionalMunicipio[];
     despesasMunicipios: DespesaMunicipio[];
   }
-  
-  
-  // You can add more shared types here as needed
-  

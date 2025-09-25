@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { IndicadorEducacional } from '../../../../types'; // Import type
+import { IndicadorEducacional } from '../../../../types';
 
 interface IdebChartProps {
-  dados: IndicadorEducacional[]; // Expecting array of state-level IDEB indicators
+  dados: IndicadorEducacional[];
   titulo?: string;
 }
 
@@ -13,13 +13,12 @@ export const IdebChart: React.FC<IdebChartProps> = ({
     titulo = "Evolução do IDEB na Paraíba"
 }) => {
 
-   // Sort data by year and filter out invalid entries
    const sortedDados = [...dados]
-     .filter(item => typeof item.ideb === 'number' && !isNaN(item.ideb)) // Filter invalid IDEB
+     .filter(item => typeof item.ideb === 'number' && !isNaN(item.ideb))
      .sort((a, b) => a.ano - b.ano);
 
-  const anos = sortedDados.map(item => String(item.ano)); // Ensure categories are strings
-  const idebValues = sortedDados.map(item => parseFloat(item.ideb.toFixed(2))); // Ensure 2 decimal places
+  const anos = sortedDados.map(item => String(item.ano));
+  const idebValues = sortedDados.map(item => parseFloat(item.ideb.toFixed(2)));
 
   const series = [
     {
@@ -38,7 +37,7 @@ export const IdebChart: React.FC<IdebChartProps> = ({
     },
     dataLabels: {
       enabled: true,
-      formatter: (value: number) => value.toFixed(2), // Format data labels
+      formatter: (value: number) => value.toFixed(2),
        offsetY: -5,
        style: {
            fontSize: '11px',
@@ -72,7 +71,7 @@ export const IdebChart: React.FC<IdebChartProps> = ({
         style: { color: '#555', fontSize: '12px', fontWeight: 500 }
       },
       labels: {
-         formatter: (value: number) => value.toFixed(1), // Format Y-axis labels
+         formatter: (value: number) => value.toFixed(1),
           style: {
              fontSize: '12px',
              colors: '#555',
@@ -81,7 +80,7 @@ export const IdebChart: React.FC<IdebChartProps> = ({
     },
     tooltip: {
       y: {
-        formatter: (value: number) => value.toFixed(2), // Format tooltip values
+        formatter: (value: number) => value.toFixed(2), 
       },
       x: {
           format: 'yyyy'
@@ -105,7 +104,6 @@ export const IdebChart: React.FC<IdebChartProps> = ({
     }
   };
 
-  // Render chart only if there's valid data
   return anos.length > 0 ? (
     <Chart options={options} series={series} type="line" height={350} width="100%" />
   ) : (

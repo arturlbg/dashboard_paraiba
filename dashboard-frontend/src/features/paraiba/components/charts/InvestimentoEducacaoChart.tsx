@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Despesa } from '../../../../types'; // Import type
+import { Despesa } from '../../../../types';
 
 interface InvestimentoEducacaoChartProps {
-  dados: Despesa[]; // Expecting array of state-level expenses
+  dados: Despesa[];
   titulo?: string;
 }
 
@@ -12,7 +12,6 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
     dados,
     titulo = "Evolução do Investimento em Educação na Paraíba"
 }) => {
-   // Sort data by year and filter out invalid entries
    const sortedDados = [...dados]
      .filter(item => typeof item.despesa_total === 'number' && !isNaN(item.despesa_total))
      .sort((a, b) => parseInt(a.ano) - parseInt(b.ano));
@@ -27,11 +26,10 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
     },
   ];
 
-   // Helper to format currency for axis/tooltip
    const formatCurrencyAxis = (value: number): string => {
       if (value >= 1e9) return `R$ ${(value / 1e9).toFixed(1)} Bi`;
       if (value >= 1e6) return `R$ ${(value / 1e6).toFixed(1)} Mi`;
-      if (value >= 1e3) return `R$ ${(value / 1e3).toFixed(0)} k`; // Use k for thousands
+      if (value >= 1e3) return `R$ ${(value / 1e3).toFixed(0)} k`; 
       return `R$ ${value.toFixed(0)}`;
    };
 
@@ -44,14 +42,14 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
       fontFamily: 'Open Sans, sans-serif',
     },
     dataLabels: {
-      enabled: true, // Enable labels on points
-      formatter: formatCurrencyAxis, // Use formatter
-      offsetY: -7, // Adjust position
+      enabled: true,
+      formatter: formatCurrencyAxis, 
+      offsetY: -7, 
        style: {
-           fontSize: '10px', // Smaller font for labels
+           fontSize: '10px',
            colors: ["#304758"]
        },
-       background: { // Add slight background for better contrast if needed
+       background: { 
            enabled: true,
            foreColor: '#fff',
            padding: 3,
@@ -62,7 +60,7 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
        }
     },
     stroke: {
-      curve: 'smooth', // Changed to smooth
+      curve: 'smooth', 
       width: 3,
     },
      markers: {
@@ -95,7 +93,7 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
         style: { color: '#555', fontSize: '12px', fontWeight: 500 }
       },
       labels: {
-        formatter: formatCurrencyAxis, // Use currency formatter
+        formatter: formatCurrencyAxis,
          style: {
              fontSize: '12px',
              colors: '#555',
@@ -121,7 +119,6 @@ export const InvestimentoEducacaoChart: React.FC<InvestimentoEducacaoChartProps>
     }
   };
 
-   // Render chart only if there's valid data
    return anos.length > 0 ? (
      <Chart options={options} series={series} type="line" height={350} width="100%" />
   ) : (
