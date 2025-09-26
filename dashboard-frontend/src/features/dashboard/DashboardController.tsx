@@ -1,40 +1,31 @@
 import React, { useState } from 'react';
-import { MunicipiosDashboard } from '../municipios/MunicipiosDashboard'; // Corrected path
-import { ParaibaDashboard } from '../paraiba/ParaibaDashboard'; // Corrected path
-import { MunicipioFilters } from './components/MunicipioFilter'; // Corrected path
-import { PeriodoFilter } from './components/PeriodoFilter'; // Corrected path
-import LoadingOverlay from '../../components/ui/LoadingOverlay'; // Corrected path
-import { useDashboardFilters } from './hooks/useDashboardFilters'; // Corrected path
-import { Municipio, Ano } from '../../types'; // Assuming types are defined
+import { MunicipiosDashboard } from '../municipios/MunicipiosDashboard';
+import { ParaibaDashboard } from '../paraiba/ParaibaDashboard';
+import { MunicipioFilters } from './components/MunicipioFilter';
+import { PeriodoFilter } from './components/PeriodoFilter';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { useDashboardFilters } from './hooks/useDashboardFilters';
+import { Municipio, Ano } from '../../types';
 
 type ViewType = 'municipio' | 'paraiba';
 
 export const DashboardController: React.FC = () => {
   const [activeView, setActiveView] = useState<ViewType>('municipio');
-  const [globalIsLoading, setGlobalIsLoading] = useState<boolean>(true); // Tracks loading state from children
+  const [globalIsLoading, setGlobalIsLoading] = useState<boolean>(true);
   const [selectedMunicipio, setSelectedMunicipio] = useState<Municipio | null>(null);
-  const [selectedAno, setSelectedAno] = useState<string | null>('2023'); // Default year
+  const [selectedAno, setSelectedAno] = useState<string | null>('2023'); 
 
-  // Fetch filter data using the custom hook
   const { filterData, isLoading: isLoadingFilters, error: filterError } = useDashboardFilters();
 
-  // Combined loading state: true if filters are loading OR if a child dashboard signals loading
   const isLoading = isLoadingFilters || globalIsLoading;
 
   const handleViewChange = (view: ViewType): void => {
     if (view === activeView) return;
-    setGlobalIsLoading(true); // Assume loading when switching views until child confirms otherwise
+    setGlobalIsLoading(true);
     setActiveView(view);
-    // Reset municipio selection when switching away from municipio view? Optional.
-    // if (view === 'paraiba') {
-    //   setSelectedMunicipio(null);
-    // }
   };
 
-  // Function passed to child dashboards to update the global loading state
   const handleSetLoadingState = (loadingState: boolean): void => {
-    // Only update global loading if it's different from filter loading state
-    // Or simply set it based on the child's state
     setGlobalIsLoading(loadingState);
   };
 
@@ -114,19 +105,17 @@ export const DashboardController: React.FC = () => {
         {/* Conditionally render dashboards based on view */}
         {activeView === 'municipio' ? (
           <MunicipiosDashboard
-            filterData={filterData} // Pass filter data down
+            filterData={filterData}
             //isLoadingFilters={isLoadingFilters} // Let the child know if filters are loading
-            setLoadingState={handleSetLoadingState} // Pass the function to update global loading
+            setLoadingState={handleSetLoadingState}
             selectedMunicipio={selectedMunicipio}
             selectedAno={selectedAno}
-            // No need to pass setters if they are handled here
           />
         ) : (
           <ParaibaDashboard
              // isLoadingFilters={isLoadingFilters} // Let the child know
              setLoadingState={handleSetLoadingState} // Pass the function
              selectedAno={selectedAno}
-             // No need to pass setSelectedAno if handled here
           />
         )}
       </main>
