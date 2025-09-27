@@ -1,6 +1,6 @@
 # Dashboard Educacional - Paraíba
 
-Este projeto é um dashboard interativo desenvolvido em React com Vite, TypeScript e TailwindCSS para visualização de dados educacionais do estado da Paraíba e seus municípios. Ele utiliza ApexCharts para a geração de gráficos e Leaflet para mapas.
+Este projeto é um dashboard interativo para a visualização de dados educacionais do estado da Paraíba e seus municípios. O frontend foi construído com React, Vite, e TypeScript, também utilizando TailwindCSS, ApexCharts para gráficos dinâmicos e Leaflet para mapas interativos. O backend consiste em uma API REST desenvolvida em Golang  com o framework Gin, a persistência dos dados são feitas em um banco PostgreSQL.
 
 ## Visão Geral
 
@@ -8,6 +8,14 @@ O dashboard oferece duas visualizações principais:
 
 1. **Visão Geral (PB):** Apresenta dados consolidados para o estado da Paraíba, incluindo evolução do IDEB, investimento em educação, médias do ENEM, e rankings municipais. Inclui um mapa interativo do IDEB por município.  
 2. **Por Município:** Permite ao usuário selecionar um município e um ano específicos para visualizar dados detalhados, como informações gerais do município, indicadores educacionais (IDEB, SAEB), médias do ENEM por área, comparação com a média estadual, e a relação entre investimento e desempenho no ENEM.
+
+<img width="1907" height="443" alt="TelaInicial" src="https://github.com/user-attachments/assets/7970a95c-7981-4097-9c26-01e3f36a0c50" />
+
+<img width="1896" height="861" alt="TelaMunicipios" src="https://github.com/user-attachments/assets/9c1f0bd6-1ad0-4d68-925b-13e2f7a8b0b6" />
+
+<img width="1885" height="826" alt="IdebParaiba" src="https://github.com/user-attachments/assets/361264e9-bf8e-4fdd-ac90-e4a797c9e36a" />
+
+<img width="1882" height="832" alt="TopInvestimento" src="https://github.com/user-attachments/assets/6940c0f0-a61f-4465-8c83-6b5767baffef" />
 
 ## Funcionalidades
 
@@ -18,7 +26,7 @@ O dashboard oferece duas visualizações principais:
 * Design responsivo utilizando TailwindCSS.  
 * Indicador de carregamento durante a busca de dados.  
 
-## Estrutura do Projeto (FrontEnd)
+## Estrutura do Projeto (FrontEnd - React)
 
 O projeto foi refatorado para seguir uma estrutura baseada em features, visando melhor organização e manutenibilidade:
 
@@ -37,4 +45,31 @@ O projeto foi refatorado para seguir uma estrutura baseada em features, visando 
 ├── types/              # Definições de tipos TypeScript compartilhadas
 ├── utils/              # Funções utilitárias
 └── main.tsx            # Ponto de entrada da aplicação
+```
+## Estrutura do Projeto (Back-end - Go)
 
+O backend é uma API REST desenvolvida em Go com o framework Gin.
+```text
+/
+├── controller/         # Camada de controle (handlers) que lida com as requisições HTTP.
+│   ├── estadoController.go               # Handlers para endpoints de dados consolidados do estado.
+│   ├── indicadorEducacionalController.go # Handlers para endpoints de indicadores (IDEB, etc).
+│   ├── municipioController.go            # Handlers para endpoints de dados de municípios.
+│   └── notaEnemController.go             # Handlers para endpoints de notas do ENEM.
+│
+├── db/                 # Módulo de acesso ao banco de dados.
+│   └── database.go     # Função para configurar e estabelecer a conexão com o PostgreSQL usando GORM.
+│
+├── middleware/         # Middlewares para o framework Gin.
+│   └── cors.go         # Middleware para configurar o Cross-Origin Resource Sharing (CORS).
+│
+├── models/             # Definição das estruturas de dados (structs).
+│   └── models.go       # Structs que mapeiam as tabelas e views do banco de dados para o Go (ORM).
+│
+├── router/             # Configuração das rotas da API.
+│   └── router.go       # Define todos os endpoints da API, associando-os aos seus respectivos controllers.
+│
+├── go.mod              # Arquivo de definição do módulo Go e suas dependências.
+├── go.sum              # Checksums das dependências para garantir a integridade.
+└── main.go             # Ponto de entrada da aplicação. Inicializa o DB e o servidor.
+```
