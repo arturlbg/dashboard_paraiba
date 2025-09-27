@@ -12,12 +12,14 @@ var DB *gorm.DB
 
 func ConectarDB() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=require TimeZone=America/Sao_Paulo",
-		"dpg-cvs5r249c44c739q3m30-a",
-		"arturgurjao",
-		"B91i0iB4eiqKiWTDtmrfTLbKV8EDm5hV",
-		"dashboard_5ya7",
+		"dpg-d3bil137mgec739oacqg-a",
+		"dashboard_x4yv_user",
+		"t7ifV3v2MXzFOMPRCtFpf8HuOQtX3Q8Q",
+		"dashboard_x4yv",
 		5432,
 	)
+
+	//dsn := "host=localhost user=postgres password=12345 dbname=dashboard port=5432 sslmode=disable TimeZone=America/Sao_Paulo"  #use local
 
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
